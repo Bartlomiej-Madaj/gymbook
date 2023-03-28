@@ -10,6 +10,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 
 import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from "../constants/index.js";
 import ExerciseDetails from "../components/Exercises/ExerciseDetails.jsx";
+import { useLayoutEffect } from "react";
 
 const TrainingDetails = ({ route, navigation }) => {
   const headerHeight = useHeaderHeight();
@@ -18,9 +19,12 @@ const TrainingDetails = ({ route, navigation }) => {
   const trainingDay = DUMMY_TRAININGS.find((item) => item.id === trainingId);
   const { exercises } = trainingDay;
 
-  navigation.setOptions({
-    headerTitle: trainingDay.treningName.toUpperCase()
-  })
+  useLayoutEffect(()=>{
+    navigation.setOptions({
+      headerTitle: trainingDay.treningName.toUpperCase()
+    })
+  }, [navigation, trainingDay.treningName])
+
 
   return (
     <ImageBackground
