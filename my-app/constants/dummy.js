@@ -3,10 +3,11 @@ export const DUMMY_TRAININGS = [
         id: 't1',
         date: '2023-03-12',
         treningName: 'Chest + Back',
+        unit: 'kg',
         exercises: [
             {
             title: 'Chest',
-            exercise: [
+            stats: [
                 {
                     set: '1',
                     repetition: '12',
@@ -26,7 +27,7 @@ export const DUMMY_TRAININGS = [
         },
         {
             title: 'Back',
-            exercise: [
+            stats: [
                 {
                     set: '1',
                     repetition: '12',
@@ -46,7 +47,7 @@ export const DUMMY_TRAININGS = [
         },
         {
             title: 'arm',
-            exercise: [
+            stats: [
                 {
                     set: '1',
                     repetition: '12',
@@ -70,10 +71,11 @@ export const DUMMY_TRAININGS = [
         id: 't2',
         date: '2023-03-14',
         treningName: 'Legs + Shoulder',
+        unit: 'kg',
         exercises: [
             {
             title: 'Arm',
-            exercise: [
+            stats: [
                 {
                     set: '1',
                     repetition: '12',
@@ -93,7 +95,7 @@ export const DUMMY_TRAININGS = [
         },
         {
             title: 'Legs',
-            exercise: [
+            stats: [
                 {
                     set: '1',
                     repetition: '12',
@@ -113,7 +115,7 @@ export const DUMMY_TRAININGS = [
         },
         {
             title: 'Shoulder',
-            exercise: [
+            stats: [
                 {
                     set: '1',
                     repetition: '12',
