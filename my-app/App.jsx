@@ -85,9 +85,9 @@ function App() {
   if (!loaded) return null;
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="AllTraububgs">
+      <Stack.Navigator initialRouteName="AllTrainings">
         <Stack.Screen
-          name="Your"
+          name="YourTrenings"
           component={ShowDrawer}
           options={{ headerShown: false }}
         />
@@ -100,7 +100,7 @@ function App() {
             headerTransparent: true,
           }}
         />
-        <Stack.Screen name="ExerciseForm" component={ExerciseForm} />
+        <Stack.Screen name="ExerciseForm" component={ExerciseForm} options={{title: 'New Exercice '}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
