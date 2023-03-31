@@ -1,39 +1,40 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
-const NewButton = ({onPress, title, containerStyle, textStyle}) => {
+const NewButton = ({ onPress, title, containerStyle, textStyle, rootContainerStyle, disabled=false }) => {
   return (
-    <View style={styles.rootContainer}>
-        <Pressable style={[styles.button, containerStyle]} android_ripple={{color: 'white'}} onPress={onPress}>
-          <Text style={[styles.buttonText, textStyle]}>{title}</Text>
-        </Pressable>
+    <View style={[styles.rootContainer, rootContainerStyle]}>
+      <Pressable
+        style={[styles.button, containerStyle]}
+        android_ripple={{ color: 'white' }}
+        disabled={disabled}
+        onPress={onPress}
+      >
+        <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+      </Pressable>
     </View>
-  )
-}
+  );
+};
 
-export default NewButton
+export default NewButton;
 
 const styles = StyleSheet.create({
-    rootContainer: {
-        width: '100%',
-        alignItems: 'center',
-        overflow: 'hidden'
-    },
-    button: {
-        width: '50%',
-        // flex: 1,
-        backgroundColor: COLORS.secondary,
-        // borderColor: COLORS.primary,
-        // borderWidth: 2,
-        borderRadius: 8,
-
-    },
-    buttonText: {
-        textAlign: 'center',
-        fontFamily: FONTS.medium,
-        fontSize: SIZES.medium,
-        color: COLORS.text,
-        padding: 8,
-    }
-})
+  rootContainer: {
+    minWidth: '40%',
+    borderRadius: 8,
+    backgroundColor: COLORS.secondary,
+    alignSelf: 'center',
+    overflow: 'hidden',
+  },
+  button: {
+    width: '100%',
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontFamily: FONTS.medium,
+    fontSize: SIZES.medium,
+    color: COLORS.text,
+    padding: 8,
+  },
+});

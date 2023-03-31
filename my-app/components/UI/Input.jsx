@@ -2,12 +2,34 @@ import { View, Text, StyleSheet, TextInput } from 'react-native';
 
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
-const Input = ({ label, placeholder, rootStyle, containerInputStyle, textInputStyle, labelTextStyle, config }) => {
+const Input = ({
+  label,
+  placeholder,
+  rootStyle,
+  containerInputStyle,
+  textInputStyle,
+  labelTextStyle,
+  config,
+  value,
+  setEnteredValueHandler,
+}) => {
+  function addEnteredValueHandler(inputText, setEnteredValue) {
+    setEnteredValue(inputText);
+  }
+
   return (
     <View style={[styles.conatiner, rootStyle]}>
       <Text style={[styles.labelText, labelTextStyle]}> {label} </Text>
       <View style={[styles.textInputContainer, containerInputStyle]}>
-        <TextInput {...config} placeholder={placeholder} style={textInputStyle} />
+        <TextInput
+          onChangeText={(text) =>
+            addEnteredValueHandler(text, setEnteredValueHandler)
+          }
+          {...config}
+          placeholder={placeholder}
+          style={textInputStyle}
+          value={value}
+        />
       </View>
     </View>
   );
@@ -29,5 +51,5 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.medium,
     padding: 8,
     textTransform: 'uppercase',
-  }
+  },
 });

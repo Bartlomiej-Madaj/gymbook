@@ -5,12 +5,11 @@ import {
   FlatList,
   ImageBackground,
 } from "react-native";
-import React from "react";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from "../constants/index.js";
 import Trening from "../components/Trening";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useHeaderHeight } from "@react-navigation/elements";
 import { StatusBar } from "expo-status-bar";
 
 const AllTrainings = ({navigation, route}) => {

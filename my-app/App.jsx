@@ -9,6 +9,7 @@ import AllTrainings from './screens/AllTrainings';
 import TrainingForm from './screens/TrainingForm';
 import TrainingDetails from './screens/TrainingDetails';
 import ExerciseForm from './screens/ExerciseForm';
+import TrainingProvider from './store/traningContext';
 
 const Drawer = createDrawerNavigator();
 
@@ -24,27 +25,6 @@ const commonProps = {
     opacity: 0.9,
   },
 };
-
-function ShowFormsScreen() {
-  return (
-    <Stack.Navigator initialRouteName="TrainingForm">
-      <Stack.Screen
-        name="TrainingForm"
-        component={TrainingForm}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="ExerciseForm"
-        component={ExerciseForm}
-        options={{
-          headerTintColor: 'white',
-          headerTitleAlign: 'center',
-          headerTransparent: true,
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
 
 function ShowDrawer() {
   return (
@@ -66,6 +46,9 @@ function ShowDrawer() {
         component={TrainingForm}
         options={{
           title: 'Add Training',
+          headerTintColor: 'white',
+          headerTitleAlign: 'center',
+          headerTransparent: true,
           ...commonProps,
         }}
       />
@@ -84,25 +67,36 @@ function App() {
 
   if (!loaded) return null;
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="AllTrainings">
-        <Stack.Screen
-          name="YourTrenings"
-          component={ShowDrawer}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TrainingDetails"
-          component={TrainingDetails}
-          options={{
-            headerTintColor: 'white',
-            headerTitleAlign: 'center',
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen name="ExerciseForm" component={ExerciseForm} options={{title: 'New Exercice '}} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <TrainingProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="AllTrainings">
+          <Stack.Screen
+            name="YourTrenings"
+            component={ShowDrawer}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TrainingDetails"
+            component={TrainingDetails}
+            options={{
+              headerTintColor: 'white',
+              headerTitleAlign: 'center',
+              headerTransparent: true,
+            }}
+          />
+          <Stack.Screen
+            name="ExerciseForm"
+            component={ExerciseForm}
+            options={{
+              title: 'New Exercise ',
+              headerTintColor: 'white',
+              headerTitleAlign: 'center',
+              headerTransparent: true,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </TrainingProvider>
   );
 }
 

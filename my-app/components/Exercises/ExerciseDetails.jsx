@@ -36,8 +36,9 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "row",
+    paddingVertical: 4 ,
     borderBottomWidth: 2,
-    borderColor: "grey",
+    borderColor: COLORS.secondary,
   },
   title: {
     textTransform: "capitalize",
