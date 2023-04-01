@@ -29,6 +29,9 @@ const Input = ({
           placeholder={placeholder}
           style={textInputStyle}
           value={value}
+          autoCorrect={false}
+          autoCapitalize='none'
+          
         />
       </View>
     </View>

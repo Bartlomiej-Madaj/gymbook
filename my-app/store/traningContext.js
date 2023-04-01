@@ -17,20 +17,9 @@ import { createContext, useState } from "react";
    }
 
    function addNewExercice(exercise){
-      setNewExercise(currentExercises => [exercise, ...currentExercises])
+      setNewExercise(exercise)
    }
-   // function addNewExercice(exercise){
-   //    setNewExercise(currenExercises => {
-   //       const exerciseItem = currenExercises.find(item => item.title === exercise.title )
-   //       if(!exerciseItem) {
-   //          return exercise
-   //       }else {
-   //          return [...exerciseItem, exercise.stats]
-   //       }
-   //    })
-   // }
-
-
+   
    const value = {
       trening: newTraining,
       exercises: newExercise,

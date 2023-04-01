@@ -1,15 +1,18 @@
 import { View, Text, StyleSheet } from 'react-native';
 
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
+import ExerciseDetails from './ExerciseDetails.jsx';
 
-const NewExercise = ({ name, set, rep, weight }) => {
+const NewExercise = ({ name, exercise}) => {
   return (
     <View style={styles.rootContainer}>
-      <View style={styles.nameContainer}>
+      {/* <View style={styles.nameContainer}>
         <Text style={styles.nameText}>{name}</Text>
-      </View>
+      </View> */}
       <View style={styles.statsContainer}>
-        <Text style={styles.statsText}> {set} x {rep} x {weight} </Text>
+        <ExerciseDetails exercise={exercise} unite='kg' />
+        {/* {stats.map((item, id) => <Text style={styles.statsText} key={id} >{item.set}x{item.rep}x{item.weight}</Text>)} */}
+        {/* <Text style={styles.statsText}> {}</Text> */}
       </View>
     </View>
   );
@@ -20,8 +23,8 @@ export default NewExercise;
 const styles = StyleSheet.create({
   rootContainer: {
     // flex: 1,
-    borderBottomColor: COLORS.secondary,
-    borderBottomWidth: 2,
+    // borderBottomColor: COLORS.secondary,
+    // borderBottomWidth: 2,
     paddingVertical: 4,
   },
   nameContainer: {

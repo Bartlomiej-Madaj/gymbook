@@ -2,7 +2,7 @@ export const DUMMY_TRAININGS = [
     {
         id: 't1',
         date: '2023-03-12',
-        treningName: 'Chest + Back',
+        trainingTitle: 'Chest + Back',
         unit: 'kg',
         exercises: [
             {
@@ -70,7 +70,7 @@ export const DUMMY_TRAININGS = [
     {
         id: 't2',
         date: '2023-03-14',
-        treningName: 'Legs + Shoulder',
+        trainingTitle: 'Legs + Shoulder',
         unit: 'kg',
         exercises: [
             {

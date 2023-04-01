@@ -1,10 +1,11 @@
 import { View, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Input from '../UI/Input';
 import NewButton from '../UI/NewButton';
 import { ExerciseStat } from '../../models/exerciseModel';
 import { searchExerciseByName, compareItemsById } from '../../helpers/support-function';
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
+import { TraningContext } from '../../store/traningContext';
 
 const inputConfig = { maxLength: 3, keyboardType: 'numeric' };
 
@@ -13,27 +14,32 @@ const AddSetsPanel = ({exercises, exerciseName, updateStats, clearExerciseName, 
     const [amountSet, setAmountSet] = useState('');
     const [amountRep, setAmountRep] = useState('');
     const [weight, setWeight] = useState('');
+    const exercisesCtx = useContext(TraningContext);
 
     function addSetHandler() {
         const searchedExercise = searchExerciseByName(exercises, exerciseName);
-    
+
         const enteredStats = new ExerciseStat(amountSet, amountRep, weight);
     
         updateStats((currentExercises) => {
           const updateExercise = currentExercises.map((exercise) => {
-            if ( !compareItemsById(exercise.id, searchedExercise.id)) {
-              return {
-                ...exercise,
-              };
-            } else {
+            if (compareItemsById(exercise.id, searchedExercise.id)) {
               return {
                 ...exercise,
                 stats: [...exercise.stats, enteredStats],
               };
+            } else {
+              return {
+                ...exercise,
+              };
             }
           });
+          exercisesCtx.addExercise(updateExercise)
           return [...updateExercise];
         });
+        setAmountRep('');
+        setAmountSet('');
+        setWeight('');
       }
     
       function addNewExerciseHandler() {

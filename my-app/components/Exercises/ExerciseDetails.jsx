@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 
 import { SIZES, FONTS, COLORS } from "../../constants/index";
 
-const ExerciseDetails = ({ exercise, unit }) => {
+const ExerciseDetails = ({ exercise, unite }) => {
   const { title, stats } = exercise;
   return (
     <View style={[styles.rootContainer]}>
@@ -10,12 +10,12 @@ const ExerciseDetails = ({ exercise, unit }) => {
       <View style={styles.container}>
         <Text style={styles.stats}> Set</Text>
         <Text style={styles.stats}> Rep </Text>
-        <Text style={styles.stats}> Weight [{unit}]</Text>
+        <Text style={styles.stats}> Weight [{unite}]</Text>
       </View>
       {stats.map((stat) => (
-        <View style={styles.container}>
+        <View key={stat.id} style={styles.container}>
           <Text style={styles.stats}> {stat.set} </Text>
-          <Text style={styles.stats}> {stat.repetition} </Text>
+          <Text style={styles.stats}> {stat.repetition || stat.rep} </Text>
           <Text style={styles.stats}> {stat.weight}</Text>
         </View>
       ))}
@@ -27,18 +27,21 @@ export default ExerciseDetails;
 
 const styles = StyleSheet.create({
   rootContainer: {
-    width: "100%",
+    // width: "100%",
     // borderColor: "grey",
     // borderWidth: 2,
-    marginVertical: 16,
-    
+    margin: 8,
+    // borderColor: COLORS.secondary,
+    // borderWidth: 2,
+    borderRadius: 8,
+    backgroundColor: '#ccccccb4'
   },
   container: {
     width: "100%",
     flexDirection: "row",
     paddingVertical: 4 ,
-    borderBottomWidth: 2,
-    borderColor: COLORS.secondary,
+    borderTopWidth: 2,
+    borderColor: COLORS.grey,
   },
   title: {
     textTransform: "capitalize",

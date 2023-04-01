@@ -11,9 +11,14 @@ import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from "../constants/index.js";
 import Trening from "../components/Trening";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { TraningContext } from "../store/traningContext.js";
+import { useContext } from "react";
 
 const AllTrainings = ({navigation, route}) => {
   const headerHeight = useHeaderHeight();
+  const trainingCtx = useContext(TraningContext);
+
+  const trainings = [...trainingCtx.trening, ...DUMMY_TRAININGS]
 
   // const navigation = useNavigation()
 
@@ -34,8 +39,8 @@ const AllTrainings = ({navigation, route}) => {
           <Text style={styles.title}>Your Trenings</Text>
         </View> */}
         <FlatList
-          data={DUMMY_TRAININGS}
-          renderItem={({ item }) => <Trening title={item.treningName} date={item.date} id={item.id} onPress={showTreningDetailsHandler.bind(this, item.id)} />
+          data={trainings}
+          renderItem={({ item }) => <Trening title={item.trainingTitle} date={item.date} id={item.id} onPress={showTreningDetailsHandler.bind(this, item.id)} />
           }
           keyExtractor={(item) => item.id} numColumns={2} showsVerticalScrollIndicator={false}
         />

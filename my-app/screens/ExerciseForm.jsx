@@ -7,7 +7,7 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHeaderHeight } from '@react-navigation/elements';
 
 import { TraningContext } from '../store/traningContext';
@@ -16,18 +16,29 @@ import { SIZES, FONTS, COLORS } from '../constants/index.js';
 import NewButton from '../components/UI/NewButton';
 import Input from '../components/UI/Input';
 import { Exercise, ExerciseStat } from '../models/exerciseModel';
-import NewExercise from '../components/Exercises/NewExercise';
 import { searchExerciseByName } from '../helpers/support-function';
 import AddSetsPanel from '../components/Exercises/AddSetsPanel';
 import Headline from '../components/Text/Headline';
 import List from '../components/Exercises/List';
+import { useNavigation, useRoute } from '@react-navigation/native';
+// import AddExercisePanel from '../components/Exercises/AddExercisePanel';
 
 const ExerciseForm = () => {
   const headerHeight = useHeaderHeight();
   const [exercises, setExercises] = useState([]);
   const [exerciseName, setExerciseName] = useState('');
   const [statsIsVisible, setStatsIsVisible] = useState(false);
-  const exercisesCtx = useContext(TraningContext);
+  const navigate = useNavigation();
+  const route = useRoute();
+  const trainingCtx = useContext(TraningContext);
+
+  const { newTraining } = route.params;
+
+  useEffect(()=> {
+    newTraining.updateExercise(exercises)
+  }, [exercises])
+
+  trainingCtx.addExercise(exercises)
 
   function addExerciseHandler() {
     if (!exerciseName || searchExerciseByName(exercises, exerciseName)) return;
@@ -38,14 +49,19 @@ const ExerciseForm = () => {
     setStatsIsVisible(true);
   }
 
+  function finishTrainingHandler() {
+    trainingCtx.addTrening(newTraining)
+    navigate.navigate('AllTrainings');
+  }
+
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
+    <KeyboardAvoidingView style={{ flex: 1 }} enabled={false}>
       <ImageBackground
         style={styles.imageContainer}
         source={require('../assets/images/background.jpg')}
       >
         <View style={[styles.container, { marginTop: headerHeight }]}>
-          {!statsIsVisible ? (
+          {!statsIsVisible ? ( 
             <View>
               <Input
                 setEnteredValueHandler={setExerciseName}
@@ -55,21 +71,41 @@ const ExerciseForm = () => {
                 label="Exercise name"
                 placeholder="Put some name"
               />
-              <NewButton
-                title="Add Exercise"
-                onPress={addExerciseHandler}
-                rootContainerStyle={{ marginVertical: 8, width: '50%' }}
-              />
+              <View style={styles.containerButton}>
+                <NewButton
+                  title="Add Exercise"
+                  onPress={addExerciseHandler}
+                  rootContainerStyle={{ marginVertical: 8 }}
+                />
+                <NewButton
+                  title="Finish Training"
+                  onPress={finishTrainingHandler}
+                  rootContainerStyle={{ marginVertical: 8 }}
+                />
+              </View>
             </View>
           ) : (
-            <Headline>
-              {exerciseName}
-            </Headline>
+            <Headline>{exerciseName}</Headline>
           )}
-          {statsIsVisible && ( <AddSetsPanel exercises={exercises} exerciseName={exerciseName} updateStats={setExercises} clearExerciseName={setExerciseName} showExercisesPanel={setStatsIsVisible} />
+          {statsIsVisible && (
+            <AddSetsPanel
+              exercises={exercises}
+              exerciseName={exerciseName}
+              updateStats={setExercises}
+              clearExerciseName={setExerciseName}
+              showExercisesPanel={setStatsIsVisible}
+            />
           )}
         </View>
-        { statsIsVisible ? <List title='Your Exercise' /> : <List title='Your Exercises' />  }
+        {statsIsVisible ? (
+          <List
+            title="Your Exercise"
+            exerciseName={exerciseName}
+            data={exercises}
+          />
+        ) : (
+          <List title="Your Exercises" data={exercises} />
+        )}
       </ImageBackground>
     </KeyboardAvoidingView>
   );
@@ -81,11 +117,9 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
   },
-  container: {
-    // flex: 1,
-    // minHeight: '50%',
-    // borderWidth: 3,
-    // borderColor: 'white'
+  containerButton: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-evenly',
   },
   inputsContainer: {
     flexDirection: 'row',
@@ -102,6 +136,5 @@ const styles = StyleSheet.create({
   },
   labelText: {
     color: 'white',
-  }
-
+  },
 });

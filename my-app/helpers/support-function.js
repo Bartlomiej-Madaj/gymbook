@@ -6,6 +6,6 @@ export function searchExerciseByName(exercises, searchName) {
   return exercise;
 }
 
-export function compareItemsById(firstItemId, secondItemoId) {
-  return firstItemId.id === secondItemoId.id;
+export function compareItemsById(firstItemId, secondItemId) {
+  return firstItemId === secondItemId;
 }

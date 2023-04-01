@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import React from 'react'
+import NewExercise from '../Exercises/NewExercise'
+import ExerciseDetails from '../Exercises/ExerciseDetails'
 
 const DynamicList = ({data}) => {
   return (
@@ -7,11 +9,9 @@ const DynamicList = ({data}) => {
     style={styles.list}
     data={data}
     renderItem={({ item }) => (
-      <NewExercise
-        name={item.title}
-        // set={item.set}
-        // rep={item.rep}
-        // weight={item.weight}
+      <ExerciseDetails
+        exercise ={item}
+        unite='kg'
       />
     )}
     keyExtractor={() => Math.random().toFixed(6)}
@@ -23,6 +23,6 @@ export default DynamicList
 
 const styles = StyleSheet.create({
     list:{
-
+// flex: 1,
     }
 })

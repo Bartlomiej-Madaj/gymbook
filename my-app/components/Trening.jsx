@@ -10,7 +10,7 @@ function Trening({ title, date, id, onPress }) {
     <View style={styles.rootContainer}>
       <Pressable onPress={onPress} style={styles.container} android_ripple={{ color: "#a6c6f5" }}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.date}>{date}</Text>
+        <Text style={styles.date}>{new Date(date).toDateString('en-US')}</Text>
       </Pressable>
     </View>
   );
