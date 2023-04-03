@@ -4,11 +4,11 @@ import { useNavigation } from "@react-navigation/native";
 import { COLORS, SIZES, FONTS } from "../constants/index/";
 // import { FONTS } from '../constants'
 
-function Trening({ title, date, id, onPress }) {
+function Training({ title, date, id, onPress }) {
 
   return (
     <View style={styles.rootContainer}>
-      <Pressable onPress={onPress} style={styles.container} android_ripple={{ color: "#a6c6f5" }}>
+      <Pressable onPress={onPress.bind(this, id)} style={styles.container} android_ripple={{ color: "#a6c6f5" }}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.date}>{new Date(date).toDateString('en-US')}</Text>
       </Pressable>
@@ -16,7 +16,7 @@ function Trening({ title, date, id, onPress }) {
   );
 }
 
-export default Trening;
+export default Training;
 
 const styles = StyleSheet.create({
   rootContainer: {

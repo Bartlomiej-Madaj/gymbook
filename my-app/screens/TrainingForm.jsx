@@ -12,44 +12,57 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { SIZES, FONTS, COLORS } from '../constants/index.js';
 import Input from '../components/UI/Input.jsx';
 import NewButton from '../components/UI/NewButton.jsx';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Training } from '../models/trainingModel.js';
+import { TraningContext } from '../store/traningContext.js';
 
 const TrainingForm = () => {
   const headerHeight = useHeaderHeight();
   const navigation = useNavigation();
   const [enteredTrainigTitle, setEnteredTrainingTitle] = useState('');
-  const [enteredTrainigUnite, setEnteredTrainingUnite] = useState('');
-  const [isValid, setIsValid] = useState(true)
-  const [messageOfInvalidInput, setMessageOfInvalidInput] = useState('')
-  // const [newTraining, setNewTraining] = useState()
+  const [enteredTrainigUnit, setEnteredTrainingUnit] = useState('');
+  const [isValid, setIsValid] = useState(true);
+  const [messageOfInvalidInput, setMessageOfInvalidInput] = useState('');
+  const trainingCtx = useContext(TraningContext);
 
-  // if(!enteredTrainigTitle || !enteredTrainigUnite) {
-  //   setIsValid(false)
-  // }
-  function checkFormIsValid(...params){
-    return !params.includes('')
+  function checkFormIsValid(...params) {
+    return !params.includes('');
   }
 
-  // let messageOfInvalidInput;
   function goToExerciseForm() {
-    if(!checkFormIsValid(enteredTrainigTitle, enteredTrainigUnite)){
-      setIsValid(false)
-     return setMessageOfInvalidInput('Title and unite cannot be empty!')
+    if (!checkFormIsValid(enteredTrainigTitle, enteredTrainigUnit)) {
+      setIsValid(false);
+      return setMessageOfInvalidInput('Title and unit cannot be empty!');
     }
-    const training = new Training(enteredTrainigTitle, enteredTrainigUnite)
-    // setNewTraining(training)
-    navigation.navigate('ExerciseForm', {newTraining: training});
-    // console.log(newTraining)
+    const training = new Training(enteredTrainigTitle, enteredTrainigUnit);
+    trainingCtx.addTraining(training);
+    setEnteredTrainingTitle('');
+    setEnteredTrainingUnit('');
+    navigation.navigate('ExerciseForm', { trainingId: training.id });
   }
 
   return (
     <ImageBackground
-      style={styles.imageContainer}
       source={require('../assets/images/background.jpg')}
+      resizeMode="cover"
+      style={styles.imageContainer}
+      imageStyle={{ opacity: 0.65 }}
     >
       <View style={[styles.rootConatiner, { marginTop: headerHeight }]}>
-      {!isValid ? <Text style={{fontFamily: FONTS.medium, fontSize: SIZES.medium, color: 'red', textAlign: 'center'}}>{messageOfInvalidInput}</Text> : <></> }
+        {!isValid ? (
+          <Text
+            style={{
+              fontFamily: FONTS.medium,
+              fontSize: SIZES.medium,
+              color: 'red',
+              textAlign: 'center',
+            }}
+          >
+            {messageOfInvalidInput}
+          </Text>
+        ) : (
+          <></>
+        )}
         <Input
           setEnteredValueHandler={setEnteredTrainingTitle}
           value={enteredTrainigTitle}
@@ -60,13 +73,13 @@ const TrainingForm = () => {
           label="Training Title"
         />
         <Input
-          setEnteredValueHandler={setEnteredTrainingUnite}
-          value={enteredTrainigUnite}
+          setEnteredValueHandler={setEnteredTrainingUnit}
+          value={enteredTrainigUnit}
           config={{ autoCorrect: false, maxLength: 3 }}
           containerInputStyle={[styles.input]}
           labelTextStyle={styles.labelText}
-          placeholder="Put your unite"
-          label="Unite"
+          placeholder="Put your unit"
+          label="Unit"
         />
         <NewButton
           title="Add exercises"
@@ -87,6 +100,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
+    backgroundColor: '#606060',
   },
   input: {
     backgroundColor: '#ffffff7e',
@@ -98,6 +112,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   invalidInput: {
-    borderColor: 'red'
-  }
+    borderColor: 'red',
+  },
 });

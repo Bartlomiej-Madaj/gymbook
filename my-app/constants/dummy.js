@@ -3,64 +3,67 @@ export const DUMMY_TRAININGS = [
         id: 't1',
         date: '2023-03-12',
         trainingTitle: 'Chest + Back',
-        unit: 'kg',
+        trainingUnit: 'kg',
         exercises: [
             {
             title: 'Chest',
+            id: "e11",
             stats: [
                 {
                     set: '1',
-                    repetition: '12',
+                    rep: '12',
                     weight: '25'
                 },
                 {
                     set: '2',
-                    repetition: '10',
+                    rep: '10',
                     weight: '30'
                 },                
                 {
                     set: '3',
-                    repetition: '8',
+                    rep: '8',
                     weight: '35'
                 },
             ]
         },
         {
             title: 'Back',
+            id: "e12",
             stats: [
                 {
                     set: '1',
-                    repetition: '12',
+                    rep: '12',
                     weight: '25'
                 },
                 {
                     set: '2',
-                    repetition: '10',
+                    rep: '10',
                     weight: '30'
                 },                
                 {
                     set: '3',
-                    repetition: '8',
+                    rep: '8',
                     weight: '35'
                 },
             ]
         },
         {
             title: 'arm',
+            id: "e13",
             stats: [
                 {
                     set: '1',
-                    repetition: '12',
+                    rep: '12',
                     weight: '25'
                 },
                 {
                     set: '2',
-                    repetition: '10',
+                    rep: '10',
                     weight: '30'
                 },                
                 {
                     set: '3',
-                    repetition: '8',
+                    rep: '8',
                     weight: '35'
                 },
             ]
@@ -71,30 +74,32 @@ export const DUMMY_TRAININGS = [
         id: 't2',
         date: '2023-03-14',
         trainingTitle: 'Legs + Shoulder',
-        unit: 'kg',
+        trainingUnit: 'kg',
         exercises: [
             {
             title: 'Arm',
+            id: "e21",
             stats: [
                 {
                     set: '1',
-                    repetition: '12',
+                    rep: '12',
                     weight: '25'
                 },
                 {
                     set: '2',
-                    repetition: '10',
+                    rep: '10',
                     weight: '30'
                 },                
                 {
                     set: '3',
-                    repetition: '8',
+                    rep: '8',
                     weight: '35'
                 },
             ]
         },
         {
             title: 'Legs',
+            id: "e22",
             stats: [
                 {
                     set: '1',
@@ -115,6 +120,7 @@ export const DUMMY_TRAININGS = [
         },
         {
             title: 'Shoulder',
+            id: "e23",
             stats: [
                 {
                     set: '1',

@@ -2,10 +2,10 @@ import { View, Text, StyleSheet } from 'react-native'
 
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
-const Headline = ({children}) => {
+const Headline = ({children, textStyle}) => {
   return (
     <View>
-      <Text style={styles.headerList}>{children}</Text>
+      <Text style={[styles.headerList, textStyle]}>{children}</Text>
     </View>
   )
 }

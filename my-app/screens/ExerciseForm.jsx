@@ -1,8 +1,5 @@
 import {
   View,
-  Text,
-  FlatList,
-  SafeAreaView,
   StyleSheet,
   ImageBackground,
   KeyboardAvoidingView,
@@ -15,97 +12,88 @@ import { TraningContext } from '../store/traningContext';
 import { SIZES, FONTS, COLORS } from '../constants/index.js';
 import NewButton from '../components/UI/NewButton';
 import Input from '../components/UI/Input';
-import { Exercise, ExerciseStat } from '../models/exerciseModel';
-import { searchExerciseByName } from '../helpers/support-function';
-import AddSetsPanel from '../components/Exercises/AddSetsPanel';
-import Headline from '../components/Text/Headline';
+import { Exercise } from '../models/exerciseModel';
+import { compareItemsById } from '../helpers/support-function';
 import List from '../components/Exercises/List';
 import { useNavigation, useRoute } from '@react-navigation/native';
-// import AddExercisePanel from '../components/Exercises/AddExercisePanel';
 
 const ExerciseForm = () => {
   const headerHeight = useHeaderHeight();
-  const [exercises, setExercises] = useState([]);
   const [exerciseName, setExerciseName] = useState('');
-  const [statsIsVisible, setStatsIsVisible] = useState(false);
   const navigate = useNavigation();
   const route = useRoute();
   const trainingCtx = useContext(TraningContext);
 
-  const { newTraining } = route.params;
+  const { trainingId } = route.params;
+  const exercises = trainingCtx.exercises;
 
-  useEffect(()=> {
-    newTraining.updateExercise(exercises)
-  }, [exercises])
+  const newTraining = trainingCtx.training.find((item) =>
+    compareItemsById(item.id, trainingId)
+  );
 
-  trainingCtx.addExercise(exercises)
+  useEffect(() => {
+    navigate.setOptions({
+      title: newTraining.trainingTitle.toUpperCase(),
+    });
+  },[])
+ 
 
   function addExerciseHandler() {
-    if (!exerciseName || searchExerciseByName(exercises, exerciseName)) return;
-    setExercises((currenyExercises) => [
-      new Exercise(exerciseName),
-      ...currenyExercises,
-    ]);
-    setStatsIsVisible(true);
+    if (!exerciseName) return;
+    const newExercise = new Exercise(exerciseName);
+    trainingCtx.addExercise(newExercise);
+    showStatsForm(newExercise.id);
+  }
+
+  function showStatsForm(id) {
+    setExerciseName('');
+    navigate.navigate('StatsForm', { exerciseId: id, trainingId: trainingId });
   }
 
   function finishTrainingHandler() {
-    trainingCtx.addTrening(newTraining)
+    trainingCtx.updateTraining(trainingId);
+    trainingCtx.clearExercises();
     navigate.navigate('AllTrainings');
   }
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} enabled={false}>
       <ImageBackground
-        style={styles.imageContainer}
         source={require('../assets/images/background.jpg')}
+        resizeMode="cover"
+        style={styles.imageContainer}
+        imageStyle={{ opacity: 0.65 }}
       >
-        <View style={[styles.container, { marginTop: headerHeight }]}>
-          {!statsIsVisible ? ( 
-            <View>
-              <Input
-                setEnteredValueHandler={setExerciseName}
-                value={exerciseName}
-                containerInputStyle={styles.inputBox}
-                labelTextStyle={styles.labelText}
-                label="Exercise name"
-                placeholder="Put some name"
-              />
-              <View style={styles.containerButton}>
-                <NewButton
-                  title="Add Exercise"
-                  onPress={addExerciseHandler}
-                  rootContainerStyle={{ marginVertical: 8 }}
-                />
-                <NewButton
-                  title="Finish Training"
-                  onPress={finishTrainingHandler}
-                  rootContainerStyle={{ marginVertical: 8 }}
-                />
-              </View>
-            </View>
-          ) : (
-            <Headline>{exerciseName}</Headline>
-          )}
-          {statsIsVisible && (
-            <AddSetsPanel
-              exercises={exercises}
-              exerciseName={exerciseName}
-              updateStats={setExercises}
-              clearExerciseName={setExerciseName}
-              showExercisesPanel={setStatsIsVisible}
+        <View style={{ marginTop: headerHeight }}>
+          <View>
+            <Input
+              setEnteredValueHandler={setExerciseName}
+              value={exerciseName}
+              containerInputStyle={styles.inputBox}
+              labelTextStyle={styles.labelText}
+              label="Exercise name"
+              placeholder="Put some name"
+              config={{ maxLength: 30 }}
             />
-          )}
+            <View style={styles.containerButton}>
+              <NewButton
+                title="Add Exercise"
+                onPress={addExerciseHandler}
+                rootContainerStyle={{ marginVertical: 8 }}
+              />
+              <NewButton
+                title="Finish Training"
+                onPress={finishTrainingHandler}
+                rootContainerStyle={{ marginVertical: 8 }}
+              />
+            </View>
+          </View>
         </View>
-        {statsIsVisible ? (
-          <List
-            title="Your Exercise"
-            exerciseName={exerciseName}
-            data={exercises}
-          />
-        ) : (
-          <List title="Your Exercises" data={exercises} />
-        )}
+        <List
+          title="Your Exercises"
+          data={exercises}
+          unit={newTraining.trainingUnit}
+        />
       </ImageBackground>
     </KeyboardAvoidingView>
   );
@@ -116,6 +104,7 @@ export default ExerciseForm;
 const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
+    backgroundColor: '#606060',
   },
   containerButton: {
     flexDirection: 'row-reverse',

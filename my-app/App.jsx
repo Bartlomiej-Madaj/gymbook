@@ -1,15 +1,20 @@
+import { useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import AllTrainings from './screens/AllTrainings';
 import TrainingForm from './screens/TrainingForm';
 import TrainingDetails from './screens/TrainingDetails';
 import ExerciseForm from './screens/ExerciseForm';
 import TrainingProvider from './store/traningContext';
+import { init } from './util/database';
+import StatsForm from './screens/StatsForm';
 
 const Drawer = createDrawerNavigator();
 
@@ -33,11 +38,18 @@ function ShowDrawer() {
         name="AllTrainings"
         component={AllTrainings}
         options={{
-          headerTitle: 'YOUR TRENINGS',
+          headerTitle: 'YOUR TRAININGS',
           headerTintColor: 'white',
           headerTitleAlign: 'center',
           headerTransparent: true,
           title: 'All Trainings',
+          drawerIcon: ({ focused }) => (
+            <Ionicons
+              name="home"
+              size={20}
+              color={focused ? 'black' : 'white'}
+            />
+          ),
           ...commonProps,
         }}
       />
@@ -49,6 +61,13 @@ function ShowDrawer() {
           headerTintColor: 'white',
           headerTitleAlign: 'center',
           headerTransparent: true,
+          drawerIcon: ({ focused }) => (
+            <Ionicons
+              name="add"
+              size={20}
+              color={focused ? 'black' : 'white'}
+            />
+          ),
           ...commonProps,
         }}
       />
@@ -65,13 +84,31 @@ function App() {
     InterLight: require('./assets/fonts/Inter-Light.ttf'),
   });
 
+  
+
+  // const [dbInitialized, setDbInitialized] = useState(false);
+
+  // useEffect(() => {
+  //   init()
+  //   .then(() => {
+  //     setDbInitialized(true)
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   });
+  // }, [])
+
+  // if(!dbInitialized){
+  //   return <AppLoading />
+  // }
+
   if (!loaded) return null;
   return (
     <TrainingProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="AllTrainings">
           <Stack.Screen
-            name="YourTrenings"
+            name="YourTrainings"
             component={ShowDrawer}
             options={{ headerShown: false }}
           />
@@ -88,7 +125,17 @@ function App() {
             name="ExerciseForm"
             component={ExerciseForm}
             options={{
-              title: 'New Exercise ',
+              title: '',
+              headerTintColor: 'white',
+              headerTitleAlign: 'center',
+              headerTransparent: true,
+            }}
+          />
+          <Stack.Screen
+            name="StatsForm"
+            component={StatsForm}
+            options={{
+              title: '',
               headerTintColor: 'white',
               headerTitleAlign: 'center',
               headerTransparent: true,

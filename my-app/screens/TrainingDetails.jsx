@@ -10,21 +10,24 @@ import { useHeaderHeight } from "@react-navigation/elements";
 
 import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from "../constants/index.js";
 import ExerciseDetails from "../components/Exercises/ExerciseDetails.jsx";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
+import { TraningContext } from "../store/traningContext.js";
 
 const TrainingDetails = ({ route, navigation }) => {
   const headerHeight = useHeaderHeight();
+  const trainingCtx = useContext(TraningContext);
+
+  const trainings = [...trainingCtx.training, ...DUMMY_TRAININGS]
 
   const trainingId = route.params.trainingId;
-  const trainingDay = DUMMY_TRAININGS.find((item) => item.id === trainingId);
+  const trainingDay = trainings.find((item) => item.id === trainingId);
   const { exercises } = trainingDay;
 
   useLayoutEffect(()=>{
     navigation.setOptions({
-      headerTitle: trainingDay.treningName.toUpperCase()
+      headerTitle: trainingDay.trainingTitle.toUpperCase()
     })
-  }, [navigation, trainingDay.treningName])
-
+  }, [navigation, trainingDay.trainingTitle])
 
   return (
     <ImageBackground
@@ -34,11 +37,11 @@ const TrainingDetails = ({ route, navigation }) => {
       imageStyle={{ opacity: 0.65 }}
     >
       <View style={[styles.titleContainer, {marginTop: headerHeight}]}>
-        {/* <Text style={styles.titleText}>{trainingDay.treningName}</Text> */}
+        <Text style={styles.titleText}>{trainingDay.trainingName}</Text>
       </View>
       <ScrollView style={styles.scrollContainer}>
         {exercises.map((exercise) => (
-          <ExerciseDetails exercise={exercise} unit={trainingDay.unit} />
+          <ExerciseDetails key={exercise.id} exercise={exercise} unit={trainingDay.trainingUnit} />
         ))}
       </ScrollView>
     </ImageBackground>

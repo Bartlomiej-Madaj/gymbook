@@ -1,13 +1,26 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
 
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
 import Headline from '../Text/Headline';
-import DynamicList from '../Text/DynamicList';
 import { searchExerciseByName } from '../../helpers/support-function.js';
+import { useContext, useLayoutEffect } from 'react';
+import { TraningContext } from '../../store/traningContext.js';
+import ExerciseDetails from './ExerciseDetails.jsx';
 
-const List = ({ title, data, exerciseName }) => {
+const List = ({ title, exerciseName, unit, isIcon }) => {
+  const trainingCtx = useContext(TraningContext);
+  let data = [];
+  data = trainingCtx.exercises;
+
   let foundExercise = [];
+  useLayoutEffect(() => {
+    if (exerciseName) {
+      const exercise = searchExerciseByName(data, exerciseName);
+      foundExercise.push(exercise);
+    }
+  },[exerciseName, data])
+
   if (!data[0]) {
     return (
       <View style={styles.listContainer}>
@@ -15,16 +28,16 @@ const List = ({ title, data, exerciseName }) => {
       </View>
     );
   }
-
-  if (exerciseName) {
-    const exercise = searchExerciseByName(data, exerciseName);
-    foundExercise.push(exercise);
-  }
-
   return (
     <View style={styles.listContainer}>
       <Headline>{title}</Headline>
-      <DynamicList data={exerciseName ? foundExercise : data} />
+      <FlatList
+        data={exerciseName ? foundExercise : data}
+        renderItem={({ item }) => ( 
+          <ExerciseDetails isIcon={isIcon} exercise={item} unit={unit} />
+        )}
+        keyExtractor={() => Math.random().toFixed(6)}
+      />
     </View>
   );
 };

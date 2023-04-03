@@ -30,8 +30,7 @@ const Input = ({
           style={textInputStyle}
           value={value}
           autoCorrect={false}
-          autoCapitalize='none'
-          
+          autoCapitalize='sentences'
         />
       </View>
     </View>
