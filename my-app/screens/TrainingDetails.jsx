@@ -53,16 +53,11 @@ export default TrainingDetails;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // borderColor: "gray",
-    // borderWidth: 2,
     alignItems: "center",
     backgroundColor: "#606060",
   },
   titleContainer: {
     width: "100%",
-    // alignItems: "center",
-    // borderColor: 'grey',
-    // borderWidth: 2,
   },
   titleText: {
     fontFamily: FONTS.bold,

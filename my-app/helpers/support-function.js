@@ -9,3 +9,7 @@ export function searchExerciseByName(exercises, searchName) {
 export function compareItemsById(firstItemId, secondItemId) {
   return firstItemId === secondItemId;
 }
+
+export function checkFormIsValid(...params) {
+  return !params.includes('');
+}

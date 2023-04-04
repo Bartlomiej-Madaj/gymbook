@@ -2,36 +2,43 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 
 import { SIZES, FONTS, COLORS } from "../../constants/index";
 import AntDesignIcon from "../UI/AntDesignIcon";
-import { useState } from "react";
-import UpdateExerciseModal from "./UpdateExerciseModal";
+import { useContext, useState } from "react";
+import { TraningContext } from "../../store/traningContext";
+import UpdateStatsModal from "./UpdateStatsModal";
 
-const ExerciseDetails = ({ exercise, unit, isIcon, onPress }) => {
+const ExerciseDetails = ({ exercise, unit, statsIcon, onPress, exerciseIcon  }) => {
 
   const [exerciseModalIsVisible, setExerciseModalIsVisible ] = useState(false)
   const [statsId, setStatsId] = useState('')
-  // console.log(exercise)
+  const trainingCtx = useContext(TraningContext);
 
   const { stats, title, id } = exercise;
   const styleWithIcon = {
-    width: isIcon ? '25%' : '30%'
+    width: statsIcon ? '25%' : '30%'
   }
   let pressableConfig
-   pressableConfig = !isIcon && {
+    pressableConfig = !statsIcon && {
     onPress: onPress,
     android_ripple: {color: 'white'}
   }
   function showEditStatsModal(statId){
     setStatsId(statId)
     setExerciseModalIsVisible(true)
-    
+  }
+  function deleteStat(statId){
+    trainingCtx.deleteStats(exercise.id, statId)
+  }
+  function deleteExercise(){
+    trainingCtx.deleteExercise(exercise.id)
   }
   return (
     <View style={styles.rootContainer}>
-      <UpdateExerciseModal isVisible={exerciseModalIsVisible} exerciseId={id} statsId ={statsId} changeIsVisible = {() => setExerciseModalIsVisible(false)} />
+      <UpdateStatsModal isVisible={exerciseModalIsVisible} exerciseId={id} statsId ={statsId} changeModalVisibility = {() => setExerciseModalIsVisible(false)} />
       <Pressable style={{flex: 1}}  {...pressableConfig} >
         <Text style={styles.title}>{title}</Text>
+        {exerciseIcon && <AntDesignIcon name='delete' size={24} color={'#ff2121'} onPress={deleteExercise} styleIconContainer={{position: 'absolute', top: 5, right: 10}} />}
         <View style={styles.statsContainer}>
-          <Text style={[styles.stats, styleWithIcon]}> Set</Text>
+          <Text style={[styles.stats, styleWithIcon]}> Set </Text>
           <Text style={[styles.stats, styleWithIcon]}> Rep </Text>
           <Text style={[styles.stats]}> Weight [{unit}]</Text>
         </View>
@@ -40,9 +47,9 @@ const ExerciseDetails = ({ exercise, unit, isIcon, onPress }) => {
             <Text style={[styles.stats, styleWithIcon]}> {stat.set} </Text>
             <Text style={[styles.stats, styleWithIcon]}> {stat.rep} </Text>
             <Text style={[styles.stats, styleWithIcon]}> {stat.weight}</Text>
-            {isIcon && <View style={styles.iconsBox}>
+            {statsIcon && <View style={styles.iconsBox}>
               <AntDesignIcon name='edit' size={24} color={'white'} onPress={showEditStatsModal.bind(this, stat.id)} />
-              <AntDesignIcon name='delete' size={24} color={'white'} />
+              <AntDesignIcon name='delete' size={24} color={'white'} onPress={deleteStat.bind(this, stat.id)} />
             </View>}
           </View>
         ))}
@@ -68,7 +75,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.grey,
   },
   title: {
-    textTransform: "capitalize",
     fontFamily: FONTS.medium,
     fontSize: SIZES.large,
     color: COLORS.text,

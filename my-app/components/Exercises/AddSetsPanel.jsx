@@ -18,7 +18,7 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
 
     function addSetHandler() {
         const enteredStats = new ExerciseStat(amountSet, amountRep, weight);
-        trainingCtx.updateExercise(exerciseId, enteredStats)
+        trainingCtx.addStats(exerciseId, enteredStats)
         setAmountRep('');
         setAmountSet('');
         setWeight('');
@@ -88,9 +88,6 @@ const styles = StyleSheet.create({
 
     container: {
       // flex: 1,
-      // minHeight: '50%',
-      // borderWidth: 3,
-      // borderColor: 'white'
     },
     inputsContainer: {
       flexDirection: 'row',

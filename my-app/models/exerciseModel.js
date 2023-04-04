@@ -4,9 +4,6 @@ export class Exercise {
   constructor(title) {
     (this.title = title), (this.stats = []), this.id = uuid.v4() ;
   }
-  // updateStats(stat) {
-  //   this.stats = stat;
-  // }
 }
 
 export class ExerciseStat {

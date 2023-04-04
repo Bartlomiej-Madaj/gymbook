@@ -15,6 +15,7 @@ import NewButton from '../components/UI/NewButton.jsx';
 import { useContext, useState } from 'react';
 import { Training } from '../models/trainingModel.js';
 import { TraningContext } from '../store/traningContext.js';
+import { checkFormIsValid } from '../helpers/support-function.js';
 
 const TrainingForm = () => {
   const headerHeight = useHeaderHeight();
@@ -24,10 +25,6 @@ const TrainingForm = () => {
   const [isValid, setIsValid] = useState(true);
   const [messageOfInvalidInput, setMessageOfInvalidInput] = useState('');
   const trainingCtx = useContext(TraningContext);
-
-  function checkFormIsValid(...params) {
-    return !params.includes('');
-  }
 
   function goToExerciseForm() {
     if (!checkFormIsValid(enteredTrainigTitle, enteredTrainigUnit)) {
@@ -75,7 +72,7 @@ const TrainingForm = () => {
         <Input
           setEnteredValueHandler={setEnteredTrainingUnit}
           value={enteredTrainigUnit}
-          config={{ autoCorrect: false, maxLength: 3 }}
+          config={{ autoCorrect: false, maxLength: 3, autoCapitalize: 'none' }}
           containerInputStyle={[styles.input]}
           labelTextStyle={styles.labelText}
           placeholder="Put your unit"
@@ -95,7 +92,6 @@ export default TrainingForm;
 
 const styles = StyleSheet.create({
   rootConatiner: {
-    // marginTop: 16,
     flex: 1,
   },
   imageContainer: {

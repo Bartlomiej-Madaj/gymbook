@@ -59,8 +59,6 @@ export default AllTrainings;
 const styles = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    // borderColor: "gray",
-    // borderWidth: 2,
     alignItems: 'center',
     backgroundColor: '#606060',
   },

@@ -13,24 +13,24 @@ const Input = ({
   value,
   setEnteredValueHandler,
 }) => {
-  function addEnteredValueHandler(inputText, setEnteredValue) {
-    setEnteredValue(inputText);
+  function addEnteredValueHandler(inputText) {
+    setEnteredValueHandler(inputText);
   }
 
   return (
-    <View style={[styles.conatiner, rootStyle]}>
+    <View style={rootStyle}>
       <Text style={[styles.labelText, labelTextStyle]}> {label} </Text>
       <View style={[styles.textInputContainer, containerInputStyle]}>
         <TextInput
           onChangeText={(text) =>
-            addEnteredValueHandler(text, setEnteredValueHandler)
+            addEnteredValueHandler(text)
           }
-          {...config}
           placeholder={placeholder}
           style={textInputStyle}
           value={value}
           autoCorrect={false}
           autoCapitalize='sentences'
+          {...config}
         />
       </View>
     </View>
@@ -40,9 +40,6 @@ const Input = ({
 export default Input;
 
 const styles = StyleSheet.create({
-  conatiner: {
-    // marginVertical: 16,
-  },
   textInputContainer: {
     borderColor: COLORS.grey,
     borderWidth: 2,

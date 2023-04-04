@@ -1,11 +1,8 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 import { COLORS, SIZES, FONTS } from "../constants/index/";
-// import { FONTS } from '../constants'
 
 function Training({ title, date, id, onPress }) {
-
   return (
     <View style={styles.rootContainer}>
       <Pressable onPress={onPress.bind(this, id)} style={styles.container} android_ripple={{ color: "#a6c6f5" }}>
@@ -34,8 +31,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // width: "100%",
-    // height: '100%',
     justifyContent: "space-around",
     alignItems: "center",
   },

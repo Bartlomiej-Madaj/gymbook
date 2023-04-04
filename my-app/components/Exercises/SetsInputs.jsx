@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import Input from '../UI/Input'
 import { TraningContext } from '../../store/traningContext';
 
-const SetsInputs = ({onAdjust }) => {
+const SetsInputs = () => {
 
     const [amountSet, setAmountSet] = useState('');
     const [amountRep, setAmountRep] = useState('');
@@ -12,7 +12,7 @@ const SetsInputs = ({onAdjust }) => {
 
     function addSetHandler() {
         const enteredStats = new ExerciseStat(amountSet, amountRep, weight);
-        trainingCtx.updateExercise(exerciseId, enteredStats)
+        trainingCtx.addStats(exerciseId, enteredStats)
         setAmountRep('');
         setAmountSet('');
         setWeight('');
@@ -24,8 +24,6 @@ const SetsInputs = ({onAdjust }) => {
         setAmountSet('');
         setWeight('');
       }
-
-
 
   return (
     <View style={styles.inputsContainer}>

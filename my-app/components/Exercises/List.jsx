@@ -8,7 +8,7 @@ import { useContext, useLayoutEffect } from 'react';
 import { TraningContext } from '../../store/traningContext.js';
 import ExerciseDetails from './ExerciseDetails.jsx';
 
-const List = ({ title, exerciseName, unit, isIcon }) => {
+const List = ({ title, exerciseName, unit, statsIcon, showUpdateModal, exerciseIcon }) => {
   const trainingCtx = useContext(TraningContext);
   let data = [];
   data = trainingCtx.exercises;
@@ -20,6 +20,10 @@ const List = ({ title, exerciseName, unit, isIcon }) => {
       foundExercise.push(exercise);
     }
   },[exerciseName, data])
+
+  function showEditExerciseModal(exerciseId){
+    showUpdateModal(exerciseId)
+  }
 
   if (!data[0]) {
     return (
@@ -34,7 +38,7 @@ const List = ({ title, exerciseName, unit, isIcon }) => {
       <FlatList
         data={exerciseName ? foundExercise : data}
         renderItem={({ item }) => ( 
-          <ExerciseDetails isIcon={isIcon} exercise={item} unit={unit} />
+          <ExerciseDetails exerciseIcon={exerciseIcon} statsIcon={statsIcon} exercise={item} unit={unit} onPress={showEditExerciseModal.bind(this, item.id)} />
         )}
         keyExtractor={() => Math.random().toFixed(6)}
       />

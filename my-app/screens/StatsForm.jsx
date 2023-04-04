@@ -33,7 +33,6 @@ const StatsForm = () => {
     })
   },[])
 
-
   function showExerciseFormScreen(){
     navigate.navigate('ExerciseForm', {trainingId: trainingId })
   }
@@ -54,7 +53,7 @@ const StatsForm = () => {
           />
         </View>
         <List
-          isIcon={true}
+          statsIcon={true}
           title="Your Exercise"
           exerciseName={currentExercise.title}
           data={currentExercise}

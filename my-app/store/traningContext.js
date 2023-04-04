@@ -1,15 +1,18 @@
-import { createContext, useCallback, useState } from 'react';
+import { createContext, useState } from 'react';
 import { compareItemsById } from '../helpers/support-function';
 
 export const TraningContext = createContext({
   training: [],
   exercises: [],
   addTraining: (training) => {},
-  addExercise: (exercice) => {},
-  updateExercise: (exercice) => {},
   updateTraining: (training) => {},
+  addExercise: (exercice) => {},
+  updateExercise: (exerciseId, newExercise) => {},
+  deleteExercise: (exerciseId) => {},
+  addStats: (exercice) => {},
+  updateStats: (exerciseId, statsId, newStats) => {},
+  deleteStats: (exerciseId, statsId) => {},
   clearExercises: () => {},
-  editStats: (exerciseId, statsId, newStats) => {},
 });
 
 function TrainingProvider({ children }) {
@@ -66,16 +69,16 @@ function TrainingProvider({ children }) {
     setNewExercise((currentExercises) => [exercise, ...currentExercises]);
   }
 
-  function updateExercise(id, stats) {
+  function updateExercise(exerciseId, exercise) {
     const updatedExercise = newExercise.find((item) =>
-      compareItemsById(item.id, id)
+      compareItemsById(item.id, exerciseId)
     );
     setNewExercise((currentExercises) => {
       const updatedExercises = currentExercises.map((item) => {
         if (compareItemsById(item.id, updatedExercise.id)) {
           return {
             ...item,
-            stats: [stats, ...item.stats],
+            ...exercise,
           };
         } else {
           return item;
@@ -85,7 +88,32 @@ function TrainingProvider({ children }) {
     });
   }
 
-  function updateStats(prevStats, updatedStatsId, newStats) {
+  function deleteExercise(exerciseId) {
+    setNewExercise((currentExercises) =>
+      currentExercises.filter((item) => item.id !== exerciseId)
+    );
+  }
+
+  function addNewStats(id, stats) {
+    const updatedExercise = newExercise.find((item) =>
+      compareItemsById(item.id, id)
+    );
+    setNewExercise((currentExercises) => {
+      const updatedExercises = currentExercises.map((item) => {
+        if (compareItemsById(item.id, updatedExercise.id)) {
+          return {
+            ...item,
+            stats: [...item.stats, stats],
+          };
+        } else {
+          return item;
+        }
+      });
+      return updatedExercises;
+    });
+  }
+
+  function updateStatsHelper(prevStats, updatedStatsId, newStats) {
     const updatedStats = prevStats.map((stat) => {
       if (compareItemsById(stat.id, updatedStatsId)) {
         return {
@@ -99,25 +127,51 @@ function TrainingProvider({ children }) {
     return updatedStats;
   }
 
-  function editStats(exerciseId, statsId, newStats) {
-    const editExercise = newExercise.find((item) =>
+  function updateStats(exerciseId, statsId, newStats) {
+    const updatedExercise = newExercise.find((item) =>
       compareItemsById(item.id, exerciseId)
     );
-    const editStats = editExercise.stats.find((stat) =>
+    const editedStats = updatedExercise.stats.find((stat) =>
       compareItemsById(stat.id, statsId)
     );
     setNewExercise((currentExercises) => {
       const updatedExercises = currentExercises.map((item) => {
-        if (compareItemsById(item.id, editExercise.id)) {
+        if (compareItemsById(item.id, updatedExercise.id)) {
           const prevStats = item.stats;
-          const updatedStatsId = editStats.id;
-          const updatedStats = updateStats(prevStats, updatedStatsId, newStats);
+          const updatedStatsId = editedStats.id;
+          const updatedStats = updateStatsHelper(
+            prevStats,
+            updatedStatsId,
+            newStats
+          );
           return {
             ...item,
             stats: updatedStats,
           };
         } else {
           return item;
+        }
+      });
+      return updatedExercises;
+    });
+  }
+
+  function deleteStats(exerciseId, statId) {
+    const editedExercise = newExercise.find((item) =>
+      compareItemsById(item.id, exerciseId)
+    );
+    setNewExercise((currentExercises) => {
+      const updatedExercises = currentExercises.map((exercise) => {
+        if (compareItemsById(editedExercise.id, exercise.id)) {
+          const updatedStats = exercise.stats.filter(
+            (stat) => stat.id !== statId
+          );
+          return {
+            ...exercise,
+            stats: updatedStats,
+          };
+        } else {
+          return exercise;
         }
       });
       return updatedExercises;
@@ -132,11 +186,14 @@ function TrainingProvider({ children }) {
     training: newTraining,
     exercises: newExercise,
     addTraining: addNewTraining,
+    updateTraining: updateTraining,
     addExercise: addNewExercice,
     updateExercise: updateExercise,
-    updateTraining: updateTraining,
+    deleteExercise: deleteExercise,
+    addStats: addNewStats,
+    updateStats: updateStats,
+    deleteStats: deleteStats,
     clearExercises: clearExercises,
-    editStats: editStats,
   };
 
   return (

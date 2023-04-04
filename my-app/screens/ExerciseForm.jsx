@@ -16,10 +16,13 @@ import { Exercise } from '../models/exerciseModel';
 import { compareItemsById } from '../helpers/support-function';
 import List from '../components/Exercises/List';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import UpdateExerciseModal from '../components/Exercises/UpdateExerciseModal';
 
 const ExerciseForm = () => {
   const headerHeight = useHeaderHeight();
   const [exerciseName, setExerciseName] = useState('');
+  const [updatedExerciseId, setUpdatedExerciseId] = useState('');
+  const [exerciseModalIsVisible, setExerciseModalIsVisible] = useState(false)
   const navigate = useNavigation();
   const route = useRoute();
   const trainingCtx = useContext(TraningContext);
@@ -37,7 +40,6 @@ const ExerciseForm = () => {
     });
   },[])
  
-
   function addExerciseHandler() {
     if (!exerciseName) return;
     const newExercise = new Exercise(exerciseName);
@@ -56,6 +58,11 @@ const ExerciseForm = () => {
     navigate.navigate('AllTrainings');
   }
 
+  function showUpdateExerciseModal(exerciseId){
+    setExerciseModalIsVisible(true)
+    setUpdatedExerciseId(exerciseId)
+  }
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} enabled={false}>
       <ImageBackground
@@ -66,6 +73,7 @@ const ExerciseForm = () => {
       >
         <View style={{ marginTop: headerHeight }}>
           <View>
+            <UpdateExerciseModal isVisible={exerciseModalIsVisible} changeModalVisibility={()=>setExerciseModalIsVisible(false)} exerciseId={updatedExerciseId} />
             <Input
               setEnteredValueHandler={setExerciseName}
               value={exerciseName}
@@ -93,6 +101,8 @@ const ExerciseForm = () => {
           title="Your Exercises"
           data={exercises}
           unit={newTraining.trainingUnit}
+          showUpdateModal={showUpdateExerciseModal}
+          exerciseIcon={true}
         />
       </ImageBackground>
     </KeyboardAvoidingView>
