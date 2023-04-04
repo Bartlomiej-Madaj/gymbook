@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
-import { COLORS, SIZES, FONTS } from "../constants/index/";
+import { COLORS, SIZES, FONTS } from "../../constants/index/";
 
 function Training({ title, date, id, onPress }) {
   return (
     <View style={styles.rootContainer}>
-      <Pressable onPress={onPress.bind(this, id)} style={styles.container} android_ripple={{ color: "#a6c6f5" }}>
+      <Pressable onPress={onPress} style={styles.container} android_ripple={{ color: "#a6c6f5" }}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.date}>{new Date(date).toDateString('en-US')}</Text>
       </Pressable>

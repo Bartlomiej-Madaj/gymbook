@@ -6,6 +6,7 @@ import Input from '../UI/Input.jsx';
 import NewButton from '../UI/NewButton.jsx';
 import { useContext, useEffect, useState } from 'react';
 import { TraningContext } from '../../store/traningContext.js';
+import StatInputs from './StatInputs.jsx';
 
 const inputConfig = { maxLength: 3, keyboardType: 'numeric' };
 
@@ -16,36 +17,22 @@ const UpdateStatsModal = ({
   statsId,
 }) => {
   const { height, width } = useWindowDimensions();
-  const [exerciseName, setExerciseName] = useState('');
-  const [amountSet, setAmountSet] = useState('');
-  const [amountRep, setAmountRep] = useState('');
-  const [weight, setWeight] = useState('');
-  const [newStats, setNewStats] = useState();
+  const [enteredValues, setEnteredValues] = useState();
+  const [isClear, setIsClear] = useState(false);
   const trainingCtx = useContext(TraningContext);
 
-  useEffect(() => {
-    setNewStats({ set: amountSet, rep: amountRep, weight: weight });
-  }, [amountSet, amountRep, weight]);
-
-  const currentExercise = trainingCtx.exercises.find(
-    (item) => item.id === exerciseId
-  );
-  const currentStats = currentExercise?.stats.find(
-    (item) => item.id === statsId
-  );
-  useEffect(() => {
-    setAmountSet(currentStats?.set);
-    setAmountRep(currentStats?.rep);
-    setWeight(currentStats?.weight);
-  }, [currentStats]);
-
   function editStatsHandler() {
-    trainingCtx.updateStats(exerciseId, statsId, newStats);
+    trainingCtx.updateStats(exerciseId, statsId, enteredValues);
+    setIsClear(true)
     changeModalVisibility();
   }
 
   function closeHandler() {
     changeModalVisibility();
+  }
+
+  function adjustEnteredValue(enteredValues) {
+    setEnteredValues(enteredValues);
   }
 
   const widthFacotr = 0.95;
@@ -65,38 +52,7 @@ const UpdateStatsModal = ({
             { left: leftOffset, width: width * widthFacotr },
           ]}
         >
-          <View style={styles.inputsContainer}>
-            <Input
-              setEnteredValueHandler={setAmountSet}
-              value={amountSet}
-              rootStyle={styles.inputContainer}
-              labelTextStyle={styles.labelText}
-              containerInputStyle={styles.inputBox}
-              label="SET"
-              config={inputConfig}
-              placeholder="Set..."
-            />
-            <Input
-              setEnteredValueHandler={setAmountRep}
-              value={amountRep}
-              rootStyle={styles.inputContainer}
-              labelTextStyle={styles.labelText}
-              containerInputStyle={styles.inputBox}
-              label="REP"
-              config={inputConfig}
-              placeholder="Rep.."
-            />
-            <Input
-              setEnteredValueHandler={setWeight}
-              value={weight}
-              rootStyle={styles.inputContainer}
-              labelTextStyle={styles.labelText}
-              containerInputStyle={styles.inputBox}
-              label="Weight"
-              config={inputConfig}
-              placeholder="How many?"
-            />
-          </View>
+          <StatInputs adjustEnteredValue={adjustEnteredValue} isClear={isClear} exerciseId={exerciseId} statsId={statsId} />
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
           >

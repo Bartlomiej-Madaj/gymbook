@@ -4,7 +4,6 @@ import {
   ImageBackground,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
 } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 

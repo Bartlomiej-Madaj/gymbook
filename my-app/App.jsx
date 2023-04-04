@@ -15,6 +15,10 @@ import ExerciseForm from './screens/ExerciseForm';
 import TrainingProvider from './store/traningContext';
 import { init } from './util/database';
 import StatsForm from './screens/StatsForm';
+import { InputProvider } from './store/inputContext';
+
+// import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
+// AppRegistry.registerComponent("my-app", () => gestureHandlerRootHOC(Main));
 
 const Drawer = createDrawerNavigator();
 
@@ -84,8 +88,6 @@ function App() {
     InterLight: require('./assets/fonts/Inter-Light.ttf'),
   });
 
-  
-
   // const [dbInitialized, setDbInitialized] = useState(false);
 
   // useEffect(() => {
@@ -105,44 +107,46 @@ function App() {
   if (!loaded) return null;
   return (
     <TrainingProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="AllTrainings">
-          <Stack.Screen
-            name="YourTrainings"
-            component={ShowDrawer}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TrainingDetails"
-            component={TrainingDetails}
-            options={{
-              headerTintColor: 'white',
-              headerTitleAlign: 'center',
-              headerTransparent: true,
-            }}
-          />
-          <Stack.Screen
-            name="ExerciseForm"
-            component={ExerciseForm}
-            options={{
-              title: '',
-              headerTintColor: 'white',
-              headerTitleAlign: 'center',
-              headerTransparent: true,
-            }}
-          />
-          <Stack.Screen
-            name="StatsForm"
-            component={StatsForm}
-            options={{
-              title: '',
-              headerTintColor: 'white',
-              headerTitleAlign: 'center',
-              headerTransparent: true,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <InputProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="AllTrainings">
+            <Stack.Screen
+              name="YourTrainings"
+              component={ShowDrawer}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TrainingDetails"
+              component={TrainingDetails}
+              options={{
+                headerTintColor: 'white',
+                headerTitleAlign: 'center',
+                headerTransparent: true,
+              }}
+            />
+            <Stack.Screen
+              name="ExerciseForm"
+              component={ExerciseForm}
+              options={{
+                title: '',
+                headerTintColor: 'white',
+                headerTitleAlign: 'center',
+                headerTransparent: true,
+              }}
+            />
+            <Stack.Screen
+              name="StatsForm"
+              component={StatsForm}
+              options={{
+                title: '',
+                headerTintColor: 'white',
+                headerTitleAlign: 'center',
+                headerTransparent: true,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </InputProvider>
     </TrainingProvider>
   );
 }

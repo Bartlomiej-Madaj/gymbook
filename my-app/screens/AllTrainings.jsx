@@ -8,7 +8,7 @@ import {
 import { useHeaderHeight } from '@react-navigation/elements';
 
 import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from '../constants/index.js';
-import Training from '../components/Training';
+import Training from '../components/Training/Training.jsx';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { TraningContext } from '../store/traningContext.js';
