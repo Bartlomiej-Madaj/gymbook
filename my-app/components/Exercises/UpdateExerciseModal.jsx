@@ -8,7 +8,6 @@ import { useContext, useEffect, useState } from 'react';
 import { TraningContext } from '../../store/traningContext.js';
 import { checkFormIsValid } from '../../helpers/support-function.js';
 
-
 const UpdateExerciseModal = ({
   isVisible,
   changeModalVisibility,
@@ -23,13 +22,15 @@ const UpdateExerciseModal = ({
     setNewExercise({ title: exerciseName });
   }, [exerciseName]);
 
-  const exerciseTitle = trainingCtx.exercises.find(item => item.id === exerciseId)?.title
-  useEffect(()=>{
-    setExerciseName(exerciseTitle)
-  },[exerciseTitle])
+  const exerciseTitle = trainingCtx.exercises.find(
+    (item) => item.id === exerciseId
+  )?.title;
+  useEffect(() => {
+    setExerciseName(exerciseTitle);
+  }, [exerciseTitle]);
 
   function updateExerciseHandler() {
-    if (checkFormIsValid(!exerciseName)) return;
+    if (!checkFormIsValid(exerciseName)) return;
     trainingCtx.updateExercise(exerciseId, newExercise);
     changeModalVisibility();
   }
@@ -55,7 +56,6 @@ const UpdateExerciseModal = ({
             { left: leftOffset, width: width * widthFacotr },
           ]}
         >
-
           <Input
             setEnteredValueHandler={setExerciseName}
             value={exerciseName}
