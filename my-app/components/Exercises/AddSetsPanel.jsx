@@ -5,16 +5,18 @@ import { ExerciseStat } from '../../models/exerciseModel';
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 import { TraningContext } from '../../store/traningContext';
 import StatInputs from './StatInputs';
+import { ExerciseContext } from '../../store/exerciseContext';
 
 const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
   const [enteredValues, setEnteredValues] = useState();
   const [isClear, setIsClear] = useState(false);
-  const trainingCtx = useContext(TraningContext);
+  // const trainingCtx = useContext(TraningContext);
+  const exerciseCtx = useContext(ExerciseContext)
 
   function addSetHandler() {
     const { set, rep, weight } = enteredValues;
     const enteredStats = new ExerciseStat(set, rep, weight);
-    trainingCtx.addStats(exerciseId, enteredStats);
+    exerciseCtx.addStats(exerciseId, enteredStats);
     setIsClear(true);
   }
 
@@ -27,8 +29,8 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <StatInputs adjustEnteredValue={adjustEnteredValue} isClear={isClear} />
+    <View>
+      <StatInputs adjustEnteredValue={adjustEnteredValue}  isClear={isClear} />
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <NewButton
           title="New Exercise"
@@ -48,9 +50,6 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
 export default AddSetsPanel;
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-  },
   inputsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

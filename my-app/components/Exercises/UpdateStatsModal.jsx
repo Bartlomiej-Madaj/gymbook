@@ -7,6 +7,7 @@ import NewButton from '../UI/NewButton.jsx';
 import { useContext, useEffect, useState } from 'react';
 import { TraningContext } from '../../store/traningContext.js';
 import StatInputs from './StatInputs.jsx';
+import { ExerciseContext } from '../../store/exerciseContext.js';
 
 const inputConfig = { maxLength: 3, keyboardType: 'numeric' };
 
@@ -15,14 +16,16 @@ const UpdateStatsModal = ({
   changeModalVisibility,
   exerciseId,
   statsId,
+  inputIsClean,
 }) => {
   const { height, width } = useWindowDimensions();
   const [enteredValues, setEnteredValues] = useState();
   const [isClear, setIsClear] = useState(false);
-  const trainingCtx = useContext(TraningContext);
+  // const trainingCtx = useContext(TraningContext);
+  const exerciseCtx = useContext(ExerciseContext)
 
   function editStatsHandler() {
-    trainingCtx.updateStats(exerciseId, statsId, enteredValues);
+    exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
     setIsClear(true)
     changeModalVisibility();
   }
@@ -52,7 +55,7 @@ const UpdateStatsModal = ({
             { left: leftOffset, width: width * widthFacotr },
           ]}
         >
-          <StatInputs adjustEnteredValue={adjustEnteredValue} isClear={isClear} exerciseId={exerciseId} statsId={statsId} />
+          <StatInputs adjustEnteredValue={adjustEnteredValue}  exerciseId={exerciseId} statsId={statsId} />
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
           >

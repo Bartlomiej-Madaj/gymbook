@@ -17,6 +17,7 @@ import { compareItemsById } from '../helpers/support-function';
 import List from '../components/Exercises/List';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import UpdateExerciseModal from '../components/Exercises/UpdateExerciseModal';
+import { ExerciseContext } from '../store/exerciseContext';
 
 const ExerciseForm = () => {
   const headerHeight = useHeaderHeight();
@@ -26,11 +27,12 @@ const ExerciseForm = () => {
   const navigate = useNavigation();
   const route = useRoute();
   const trainingCtx = useContext(TraningContext);
+  const exerciseCtx = useContext(ExerciseContext)
 
   const { trainingId } = route.params;
-  const exercises = trainingCtx.exercises;
+  const exercises = exerciseCtx.exercises;
 
-  const newTraining = trainingCtx.training.find((item) =>
+  const newTraining = trainingCtx.trainings.find((item) =>
     compareItemsById(item.id, trainingId)
   );
 
@@ -43,7 +45,7 @@ const ExerciseForm = () => {
   function addExerciseHandler() {
     if (!exerciseName) return;
     const newExercise = new Exercise(exerciseName);
-    trainingCtx.addExercise(newExercise);
+    exerciseCtx.addExercise(newExercise);
     showStatsForm(newExercise.id);
   }
 
@@ -54,7 +56,7 @@ const ExerciseForm = () => {
 
   function finishTrainingHandler() {
     trainingCtx.updateTraining(trainingId);
-    trainingCtx.clearExercises();
+    exerciseCtx.clearExercises();
     navigate.navigate('AllTrainings');
   }
 

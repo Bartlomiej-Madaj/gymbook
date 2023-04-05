@@ -3,15 +3,17 @@ import React, { useContext, useEffect, useState } from 'react';
 import Input from '../UI/Input';
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 import { TraningContext } from '../../store/traningContext';
+import { ExerciseContext } from '../../store/exerciseContext';
 
 const inputConfig = { maxLength: 3, keyboardType: 'numeric' };
 
-const StatInputs = ({ adjustEnteredValue, isClear, exerciseId, statsId }) => {
+const StatInputs = ({ adjustEnteredValue, exerciseId, statsId }) => {
   const [amountSet, setAmountSet] = useState('');
   const [amountRep, setAmountRep] = useState('');
   const [weight, setWeight] = useState('');
   const [enteredValues, setEnteredValues] = useState();
-  const trainingCtx = useContext(TraningContext);
+  // const trainingCtx = useContext(TraningContext);
+  const exerciseCtx = useContext(ExerciseContext)
 
   useEffect(() => {
     setEnteredValues({
@@ -21,34 +23,21 @@ const StatInputs = ({ adjustEnteredValue, isClear, exerciseId, statsId }) => {
     });
   }, [amountSet, amountRep, weight]);
 
-  // console.log(exerciseId)
-  // console.log(statsId)
-
   useEffect(() => {
     adjustEnteredValue(enteredValues);
   }, [enteredValues]);
 
-  useEffect(() => {
-    // if(!isClear) return
-    console.log('czy to działa')
-    setAmountSet('');
-    setAmountRep('');
-    setWeight('');
-    setEnteredValues(null);
-  }, []);
-
-  console.log(amountRep)
-
-  const currentExercise = trainingCtx.exercises.find(
+  const currentExercise = exerciseCtx.exercises.find(
     (item) => item.id === exerciseId
   );
   const currentStats = currentExercise?.stats.find(
     (item) => item.id === statsId
   );
+
   useEffect(() => {
-    setAmountSet(currentStats?.set);
-    setAmountRep(currentStats?.rep);
-    setWeight(currentStats?.weight);
+      setAmountSet(currentStats?.set);
+      setAmountRep(currentStats?.rep);
+      setWeight(currentStats?.weight);
   }, [currentStats]);
 
   return (

@@ -13,17 +13,20 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useContext, useEffect } from 'react';
 import { TraningContext } from '../store/traningContext';
 import { compareItemsById } from '../helpers/support-function';
+import { ExerciseContext } from '../store/exerciseContext';
 
 const StatsForm = () => {
   const headerHeight = useHeaderHeight();
   const navigate = useNavigation();
   const route = useRoute();
   const trainingCtx = useContext(TraningContext);
+  const exerciseCtx = useContext(ExerciseContext)
 
   const { exerciseId, trainingId } = route.params
 
-  const currentTraining = trainingCtx.training.find(training => compareItemsById(training.id, trainingId))
-  const currentExercise = trainingCtx.exercises.find(exercise => compareItemsById(exercise.id, exerciseId))
+  const currentTraining = trainingCtx.trainings.find(training => compareItemsById(training.id, trainingId))
+  const currentExercise = exerciseCtx.exercises.find(exercise => compareItemsById(exercise.id, exerciseId))
+  console.log(currentExercise)
 
   const {trainingTitle, trainingUnit } = currentTraining
 

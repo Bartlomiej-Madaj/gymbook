@@ -7,6 +7,7 @@ import NewButton from '../UI/NewButton.jsx';
 import { useContext, useEffect, useState } from 'react';
 import { TraningContext } from '../../store/traningContext.js';
 import { checkFormIsValid } from '../../helpers/support-function.js';
+import { ExerciseContext } from '../../store/exerciseContext.js';
 
 const UpdateExerciseModal = ({
   isVisible,
@@ -16,13 +17,14 @@ const UpdateExerciseModal = ({
   const { height, width } = useWindowDimensions();
   const [exerciseName, setExerciseName] = useState('');
   const [newExercise, setNewExercise] = useState();
-  const trainingCtx = useContext(TraningContext);
+  // const trainingCtx = useContext(TraningContext);
+  const exerciseCtx = useContext(ExerciseContext)
 
   useEffect(() => {
     setNewExercise({ title: exerciseName });
   }, [exerciseName]);
 
-  const exerciseTitle = trainingCtx.exercises.find(
+  const exerciseTitle = exerciseCtx.exercises.find(
     (item) => item.id === exerciseId
   )?.title;
   useEffect(() => {
@@ -31,7 +33,7 @@ const UpdateExerciseModal = ({
 
   function updateExerciseHandler() {
     if (!checkFormIsValid(exerciseName)) return;
-    trainingCtx.updateExercise(exerciseId, newExercise);
+    exerciseCtx.updateExercise(exerciseId, newExercise);
     changeModalVisibility();
   }
 

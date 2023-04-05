@@ -16,7 +16,7 @@ const TrainingDetails = ({ route, navigation }) => {
   const headerHeight = useHeaderHeight();
   const trainingCtx = useContext(TraningContext);
 
-  const trainings = [...trainingCtx.training, ...DUMMY_TRAININGS]
+  const trainings = [...trainingCtx.trainings, ...DUMMY_TRAININGS]
 
   const trainingId = route.params.trainingId;
   const trainingDay = trainings.find((item) => item.id === trainingId);

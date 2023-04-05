@@ -15,10 +15,7 @@ import ExerciseForm from './screens/ExerciseForm';
 import TrainingProvider from './store/traningContext';
 import { init } from './util/database';
 import StatsForm from './screens/StatsForm';
-import { InputProvider } from './store/inputContext';
-
-// import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-// AppRegistry.registerComponent("my-app", () => gestureHandlerRootHOC(Main));
+import ExerciseProvider from './store/exerciseContext';
 
 const Drawer = createDrawerNavigator();
 
@@ -107,7 +104,7 @@ function App() {
   if (!loaded) return null;
   return (
     <TrainingProvider>
-      <InputProvider>
+      <ExerciseProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="AllTrainings">
             <Stack.Screen
@@ -146,7 +143,7 @@ function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </InputProvider>
+      </ExerciseProvider>
     </TrainingProvider>
   );
 }

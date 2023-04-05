@@ -12,14 +12,16 @@ import Training from '../components/Training/Training.jsx';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { TraningContext } from '../store/traningContext.js';
-import { useContext, useEffect, useLayoutEffect } from 'react';
+import { useContext } from 'react';
 
-const AllTrainings = ({ navigation, route }) => {
+const AllTrainings = ({ navigation }) => {
   const headerHeight = useHeaderHeight();
   const trainingCtx = useContext(TraningContext);
 
-  let trainings = trainingCtx.training[0]
-    ? [...trainingCtx.training, ...DUMMY_TRAININGS]
+  // console.log(trainingCtx.trainings)
+
+  const trainings = trainingCtx.trainings[0]
+    ? [...trainingCtx.trainings, ...DUMMY_TRAININGS]
     : DUMMY_TRAININGS;
 
   function showTrainingDetailsHandler(id) {

@@ -7,11 +7,13 @@ import { searchExerciseByName } from '../../helpers/support-function.js';
 import { useContext, useLayoutEffect } from 'react';
 import { TraningContext } from '../../store/traningContext.js';
 import ExerciseDetails from './ExerciseDetails.jsx';
+import { ExerciseContext } from '../../store/exerciseContext.js';
 
 const List = ({ title, exerciseName, unit, statsIcon, showUpdateModal, exerciseIcon }) => {
-  const trainingCtx = useContext(TraningContext);
+  // const trainingCtx = useContext(TraningContext);
+  const exerciseCtx = useContext(ExerciseContext)
   let data = [];
-  data = trainingCtx.exercises;
+  data = exerciseCtx.exercises;
 
   let foundExercise = [];
   useLayoutEffect(() => {
