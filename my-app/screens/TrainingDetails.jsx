@@ -39,7 +39,7 @@ const TrainingDetails = ({ route, navigation }) => {
         <Text style={styles.titleText}>{trainingDay.trainingName}</Text>
       </View>
       <ScrollView style={styles.scrollContainer}>
-        {exercises.map((exercise) => (
+        {exercises?.map((exercise) => (
           <ExerciseDetails key={exercise.id} exercise={exercise} unit={trainingDay.trainingUnit} />
         ))}
       </ScrollView>

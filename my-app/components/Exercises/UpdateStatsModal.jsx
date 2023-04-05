@@ -4,34 +4,31 @@ import { useWindowDimensions } from 'react-native';
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 import Input from '../UI/Input.jsx';
 import NewButton from '../UI/NewButton.jsx';
-import { useContext, useEffect, useState } from 'react';
-import { TraningContext } from '../../store/traningContext.js';
+import { useContext, useState } from 'react';
 import StatInputs from './StatInputs.jsx';
 import { ExerciseContext } from '../../store/exerciseContext.js';
-
-const inputConfig = { maxLength: 3, keyboardType: 'numeric' };
 
 const UpdateStatsModal = ({
   isVisible,
   changeModalVisibility,
   exerciseId,
   statsId,
-  inputIsClean,
+  changeIsClean,
 }) => {
   const { height, width } = useWindowDimensions();
   const [enteredValues, setEnteredValues] = useState();
-  const [isClear, setIsClear] = useState(false);
-  // const trainingCtx = useContext(TraningContext);
+  const [isClean, setIsClean] = useState(false);
   const exerciseCtx = useContext(ExerciseContext)
 
   function editStatsHandler() {
     exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
-    setIsClear(true)
     changeModalVisibility();
+    setIsClean(true)
   }
 
   function closeHandler() {
     changeModalVisibility();
+    setIsClean(true)
   }
 
   function adjustEnteredValue(enteredValues) {
@@ -55,7 +52,7 @@ const UpdateStatsModal = ({
             { left: leftOffset, width: width * widthFacotr },
           ]}
         >
-          <StatInputs adjustEnteredValue={adjustEnteredValue}  exerciseId={exerciseId} statsId={statsId} />
+          <StatInputs adjustEnteredValue={adjustEnteredValue}  exerciseId={exerciseId} statsId={statsId} isClean={isClean} changeIsClean={setIsClean}/>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
           >

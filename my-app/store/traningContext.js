@@ -14,8 +14,8 @@ function TrainingProvider({ children }) {
   const [newExercise, setNewExercise] = useState([]);
   const exerciseCtx = useContext(ExerciseContext)
   useEffect(()=>{
-    setNewExercise(exercises)
-  }, [exercises])
+    setNewExercise(exerciseCtx.exercises)
+  }, [exerciseCtx.exercises])
 
   // console.log(exerciseCtx.exercises)
 
@@ -44,7 +44,6 @@ function TrainingProvider({ children }) {
   }
 
   function updateTraining(id) {
-    // setNewExercise(exerciseCtx.exercises)
     const updatedTraining = newTraining.find((item) =>
       compareItemsById(item.id, id)
     );

@@ -26,7 +26,6 @@ const StatsForm = () => {
 
   const currentTraining = trainingCtx.trainings.find(training => compareItemsById(training.id, trainingId))
   const currentExercise = exerciseCtx.exercises.find(exercise => compareItemsById(exercise.id, exerciseId))
-  console.log(currentExercise)
 
   const {trainingTitle, trainingUnit } = currentTraining
 

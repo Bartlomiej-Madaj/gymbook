@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { SIZES, FONTS, COLORS } from "../../constants/index";
 import AntDesignIcon from "../UI/AntDesignIcon";
 import { useContext, useState } from "react";
-import { TraningContext } from "../../store/traningContext";
 import UpdateStatsModal from "./UpdateStatsModal";
 import { ExerciseContext } from "../../store/exerciseContext";
 
@@ -11,11 +10,9 @@ const ExerciseDetails = ({ exercise, unit, statsIcon, onPress, exerciseIcon  }) 
 
   const [exerciseModalIsVisible, setExerciseModalIsVisible ] = useState(false)
   const [statsId, setStatsId] = useState('')
-  // const trainingCtx = useContext(TraningContext);
   const exerciseCtx = useContext(ExerciseContext)
 
   const { stats, title, id } = exercise;
-  // console.log(exercise)
   const styleWithIcon = {
     width: statsIcon ? '25%' : '30%'
   }

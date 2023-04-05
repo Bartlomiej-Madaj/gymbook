@@ -56,7 +56,6 @@ const ExerciseForm = () => {
 
   function finishTrainingHandler() {
     trainingCtx.updateTraining(trainingId);
-    exerciseCtx.clearExercises();
     navigate.navigate('AllTrainings');
   }
 

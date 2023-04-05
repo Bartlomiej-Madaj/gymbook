@@ -3,25 +3,24 @@ import React, { useContext, useState } from 'react';
 import NewButton from '../UI/NewButton';
 import { ExerciseStat } from '../../models/exerciseModel';
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
-import { TraningContext } from '../../store/traningContext';
 import StatInputs from './StatInputs';
 import { ExerciseContext } from '../../store/exerciseContext';
 
 const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
   const [enteredValues, setEnteredValues] = useState();
-  const [isClear, setIsClear] = useState(false);
-  // const trainingCtx = useContext(TraningContext);
+  const [isClean, setIsClean] = useState(false);
   const exerciseCtx = useContext(ExerciseContext)
 
   function addSetHandler() {
     const { set, rep, weight } = enteredValues;
     const enteredStats = new ExerciseStat(set, rep, weight);
     exerciseCtx.addStats(exerciseId, enteredStats);
-    setIsClear(true);
+    setIsClean(true)
   }
 
   function addNewExerciseHandler() {
     showExerciseFormScreen();
+    setIsClean(true)
   }
 
   function adjustEnteredValue(enteredValues) {
@@ -30,7 +29,7 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
 
   return (
     <View>
-      <StatInputs adjustEnteredValue={adjustEnteredValue}  isClear={isClear} />
+      <StatInputs adjustEnteredValue={adjustEnteredValue} isClean={isClean} changeIsClean={setIsClean}/>
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <NewButton
           title="New Exercise"

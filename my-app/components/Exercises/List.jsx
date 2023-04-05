@@ -4,24 +4,25 @@ import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
 import Headline from '../Text/Headline';
 import { searchExerciseByName } from '../../helpers/support-function.js';
-import { useContext, useLayoutEffect } from 'react';
-import { TraningContext } from '../../store/traningContext.js';
+import { useContext, useEffect, useState } from 'react';
 import ExerciseDetails from './ExerciseDetails.jsx';
 import { ExerciseContext } from '../../store/exerciseContext.js';
 
 const List = ({ title, exerciseName, unit, statsIcon, showUpdateModal, exerciseIcon }) => {
-  // const trainingCtx = useContext(TraningContext);
   const exerciseCtx = useContext(ExerciseContext)
+  const [foundExercise1, setFoundExercise] = useState([])
+
+  //add useState!!!
   let data = [];
   data = exerciseCtx.exercises;
 
-  let foundExercise = [];
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (exerciseName) {
       const exercise = searchExerciseByName(data, exerciseName);
-      foundExercise.push(exercise);
+      setFoundExercise( [exercise])
     }
   },[exerciseName, data])
+
 
   function showEditExerciseModal(exerciseId){
     showUpdateModal(exerciseId)
@@ -38,7 +39,7 @@ const List = ({ title, exerciseName, unit, statsIcon, showUpdateModal, exerciseI
     <View style={styles.listContainer}>
       <Headline>{title}</Headline>
       <FlatList
-        data={exerciseName ? foundExercise : data}
+        data={exerciseName ? foundExercise1 : data}
         renderItem={({ item }) => ( 
           <ExerciseDetails exerciseIcon={exerciseIcon} statsIcon={statsIcon} exercise={item} unit={unit} onPress={showEditExerciseModal.bind(this, item.id)} />
         )}

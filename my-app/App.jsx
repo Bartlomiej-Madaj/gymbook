@@ -103,8 +103,8 @@ function App() {
 
   if (!loaded) return null;
   return (
-    <TrainingProvider>
-      <ExerciseProvider>
+    <ExerciseProvider>
+      <TrainingProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="AllTrainings">
             <Stack.Screen
@@ -143,8 +143,8 @@ function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </ExerciseProvider>
-    </TrainingProvider>
+      </TrainingProvider>
+    </ExerciseProvider>
   );
 }
 

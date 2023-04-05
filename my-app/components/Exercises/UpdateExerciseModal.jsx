@@ -17,7 +17,6 @@ const UpdateExerciseModal = ({
   const { height, width } = useWindowDimensions();
   const [exerciseName, setExerciseName] = useState('');
   const [newExercise, setNewExercise] = useState();
-  // const trainingCtx = useContext(TraningContext);
   const exerciseCtx = useContext(ExerciseContext)
 
   useEffect(() => {

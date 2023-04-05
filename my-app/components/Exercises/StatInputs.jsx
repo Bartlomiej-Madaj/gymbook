@@ -7,12 +7,11 @@ import { ExerciseContext } from '../../store/exerciseContext';
 
 const inputConfig = { maxLength: 3, keyboardType: 'numeric' };
 
-const StatInputs = ({ adjustEnteredValue, exerciseId, statsId }) => {
+const StatInputs = ({ adjustEnteredValue, exerciseId, statsId, isClean, changeIsClean }) => {
   const [amountSet, setAmountSet] = useState('');
   const [amountRep, setAmountRep] = useState('');
   const [weight, setWeight] = useState('');
   const [enteredValues, setEnteredValues] = useState();
-  // const trainingCtx = useContext(TraningContext);
   const exerciseCtx = useContext(ExerciseContext)
 
   useEffect(() => {
@@ -21,6 +20,7 @@ const StatInputs = ({ adjustEnteredValue, exerciseId, statsId }) => {
       rep: amountRep,
       weight: weight,
     });
+    changeIsClean(false)
   }, [amountSet, amountRep, weight]);
 
   useEffect(() => {
@@ -34,11 +34,21 @@ const StatInputs = ({ adjustEnteredValue, exerciseId, statsId }) => {
     (item) => item.id === statsId
   );
 
+  console.log(isClean)
+
   useEffect(() => {
+    if(!isClean){
+      console.log('tu nie')
       setAmountSet(currentStats?.set);
       setAmountRep(currentStats?.rep);
       setWeight(currentStats?.weight);
-  }, [currentStats]);
+    } else {
+      console.log('tu jestem')
+      setAmountSet('');
+      setAmountRep('');
+      setWeight('');
+    }
+  }, [isClean]);
 
   return (
     <View style={styles.inputsContainer}>
