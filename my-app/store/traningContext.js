@@ -17,8 +17,6 @@ function TrainingProvider({ children }) {
     setNewExercise(exerciseCtx.exercises)
   }, [exerciseCtx.exercises])
 
-  // console.log(exerciseCtx.exercises)
-
   function addNewTraining(training) {
     if (!newTraining[0]) {
       setNewTraining([training]);

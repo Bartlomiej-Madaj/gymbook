@@ -32,6 +32,8 @@ const ExerciseForm = () => {
   const { trainingId } = route.params;
   const exercises = exerciseCtx.exercises;
 
+  console.log(exercises[0].stats)
+
   const newTraining = trainingCtx.trainings.find((item) =>
     compareItemsById(item.id, trainingId)
   );
@@ -74,7 +76,7 @@ const ExerciseForm = () => {
       >
         <View style={{ marginTop: headerHeight }}>
           <View>
-            <UpdateExerciseModal isVisible={exerciseModalIsVisible} changeModalVisibility={()=>setExerciseModalIsVisible(false)} exerciseId={updatedExerciseId} />
+           { exerciseModalIsVisible && <UpdateExerciseModal isVisible={exerciseModalIsVisible} changeModalVisibility={()=>setExerciseModalIsVisible(false)} exerciseId={updatedExerciseId} />}
             <Input
               setEnteredValueHandler={setExerciseName}
               value={exerciseName}

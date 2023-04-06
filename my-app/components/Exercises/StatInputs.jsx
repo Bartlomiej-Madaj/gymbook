@@ -20,7 +20,7 @@ const StatInputs = ({ adjustEnteredValue, exerciseId, statsId, isClean, changeIs
       rep: amountRep,
       weight: weight,
     });
-    changeIsClean(false)
+    changeIsClean && changeIsClean(false)
   }, [amountSet, amountRep, weight]);
 
   useEffect(() => {
@@ -34,16 +34,12 @@ const StatInputs = ({ adjustEnteredValue, exerciseId, statsId, isClean, changeIs
     (item) => item.id === statsId
   );
 
-  console.log(isClean)
-
   useEffect(() => {
     if(!isClean){
-      console.log('tu nie')
       setAmountSet(currentStats?.set);
       setAmountRep(currentStats?.rep);
       setWeight(currentStats?.weight);
     } else {
-      console.log('tu jestem')
       setAmountSet('');
       setAmountRep('');
       setWeight('');
@@ -89,15 +85,6 @@ const StatInputs = ({ adjustEnteredValue, exerciseId, statsId, isClean, changeIs
 export default StatInputs;
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: '15%',
-    justifyContent: 'center',
-    backgroundColor: '#d7d7d7',
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 8,
-  },
   inputsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

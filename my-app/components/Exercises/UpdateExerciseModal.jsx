@@ -1,4 +1,12 @@
-import { View, Text, Modal, StyleSheet, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  StyleSheet,
+  TextInput,
+  ScrollView,
+  FlatList,
+} from 'react-native';
 import { useWindowDimensions } from 'react-native';
 
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
@@ -8,6 +16,8 @@ import { useContext, useEffect, useState } from 'react';
 import { TraningContext } from '../../store/traningContext.js';
 import { checkFormIsValid } from '../../helpers/support-function.js';
 import { ExerciseContext } from '../../store/exerciseContext.js';
+import UpdateStatsModal from './UpdateStatsModal.jsx';
+import EditStatsInput from './EditStatsInput.jsx';
 
 const UpdateExerciseModal = ({
   isVisible,
@@ -17,18 +27,18 @@ const UpdateExerciseModal = ({
   const { height, width } = useWindowDimensions();
   const [exerciseName, setExerciseName] = useState('');
   const [newExercise, setNewExercise] = useState();
-  const exerciseCtx = useContext(ExerciseContext)
+  const exerciseCtx = useContext(ExerciseContext);
+
+  const { title: exerciseTitle, stats } = exerciseCtx.exercises.find(
+    (item) => item.id === exerciseId
+  );
+  useEffect(() => {
+    setExerciseName(exerciseTitle);
+  }, [exerciseTitle]);
 
   useEffect(() => {
     setNewExercise({ title: exerciseName });
   }, [exerciseName]);
-
-  const exerciseTitle = exerciseCtx.exercises.find(
-    (item) => item.id === exerciseId
-  )?.title;
-  useEffect(() => {
-    setExerciseName(exerciseTitle);
-  }, [exerciseTitle]);
 
   function updateExerciseHandler() {
     if (!checkFormIsValid(exerciseName)) return;
@@ -66,6 +76,15 @@ const UpdateExerciseModal = ({
             placeholder="Put some name"
             config={{ maxLength: 30, autoCapitalize: 'none' }}
           />
+          <View>
+            <FlatList
+              data={stats}
+              renderItem={({ item }) => (
+                <EditStatsInput exerciseId={exerciseId} statsId={item.id} />
+              )}
+              keyExtractor={item => item.id}
+            />
+          </View>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
           >

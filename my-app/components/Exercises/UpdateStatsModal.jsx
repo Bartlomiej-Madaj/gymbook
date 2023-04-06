@@ -7,28 +7,30 @@ import NewButton from '../UI/NewButton.jsx';
 import { useContext, useState } from 'react';
 import StatInputs from './StatInputs.jsx';
 import { ExerciseContext } from '../../store/exerciseContext.js';
+import useManageInput from '../../hooks/useManageInput.jsx';
 
 const UpdateStatsModal = ({
   isVisible,
   changeModalVisibility,
   exerciseId,
   statsId,
-  changeIsClean,
 }) => {
   const { height, width } = useWindowDimensions();
+  // const [isClean, setIsClean, editStatsHandler, closeHandler, adjustEnteredValue] = useManageInput(exerciseId, statsId, changeModalVisibility)
+
   const [enteredValues, setEnteredValues] = useState();
   const [isClean, setIsClean] = useState(false);
-  const exerciseCtx = useContext(ExerciseContext)
+  const exerciseCtx = useContext(ExerciseContext);
 
   function editStatsHandler() {
     exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
     changeModalVisibility();
-    setIsClean(true)
+    setIsClean(true);
   }
 
   function closeHandler() {
     changeModalVisibility();
-    setIsClean(true)
+    setIsClean(true);
   }
 
   function adjustEnteredValue(enteredValues) {
@@ -52,7 +54,13 @@ const UpdateStatsModal = ({
             { left: leftOffset, width: width * widthFacotr },
           ]}
         >
-          <StatInputs adjustEnteredValue={adjustEnteredValue}  exerciseId={exerciseId} statsId={statsId} isClean={isClean} changeIsClean={setIsClean}/>
+          <StatInputs
+            adjustEnteredValue={adjustEnteredValue}
+            exerciseId={exerciseId}
+            statsId={statsId}
+            isClean={isClean}
+            changeIsClean={setIsClean}
+          />
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
           >
