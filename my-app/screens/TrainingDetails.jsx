@@ -1,48 +1,76 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import { useHeaderHeight } from "@react-navigation/elements";
+import { View, ImageBackground, StyleSheet, ScrollView } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
 
-import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from "../constants/index.js";
-import ExerciseDetails from "../components/Exercises/ExerciseDetails.jsx";
-import { useContext, useLayoutEffect } from "react";
-import { TraningContext } from "../store/traningContext.js";
+import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from '../constants/index.js';
+import ExerciseDetails from '../components/Exercises/ExerciseDetails.jsx';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { TraningContext } from '../store/traningContext.js';
+import UpdateExerciseModal from '../components/Exercises/UpdateExerciseModal.jsx';
+import { ExerciseContext } from '../store/exerciseContext.js';
+import NewButton from '../components/UI/NewButton.jsx';
 
 const TrainingDetails = ({ route, navigation }) => {
   const headerHeight = useHeaderHeight();
   const trainingCtx = useContext(TraningContext);
+  const [exerciseModalIsvisible, setExercisleModalIsvisible] = useState(false);
+  const [exerciseId, setExerciseId] = useState('');
 
-  const trainings = [...trainingCtx.trainings, ...DUMMY_TRAININGS]
+  const trainings = [...trainingCtx.trainings, ...DUMMY_TRAININGS];
 
   const trainingId = route.params.trainingId;
+  useEffect(() => {
+    trainingCtx.adjustTrainingId(trainingId);
+  }, [trainingId]);
   const trainingDay = trainings.find((item) => item.id === trainingId);
   const { exercises } = trainingDay;
 
-  useLayoutEffect(()=>{
+  useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: trainingDay.trainingTitle.toUpperCase()
-    })
-  }, [navigation, trainingDay.trainingTitle])
+      headerTitle: trainingDay.trainingTitle.toUpperCase(),
+    });
+  }, [navigation, trainingDay.trainingTitle]);
+
+  function showTraining(exerciseId) {
+    setExerciseId(exerciseId);
+    setExercisleModalIsvisible(true);
+  }
+  function deleteTraining() {
+    trainingCtx.deleteTraining(trainingId);
+    navigation.navigate('AllTrainings');
+  }
 
   return (
     <ImageBackground
-      source={require("../assets/images/background.jpg")}
+      source={require('../assets/images/background.jpg')}
       resizeMode="cover"
-      style={styles.container}
+      style={styles.ImageContainer}
       imageStyle={{ opacity: 0.65 }}
     >
-      <View style={[styles.titleContainer, {marginTop: headerHeight}]}>
-        <Text style={styles.titleText}>{trainingDay.trainingName}</Text>
+      <View style={[styles.container, { marginTop: headerHeight }]}>
+        <ScrollView style={styles.scrollContainer}>
+          {exercises?.map((exercise) => (
+            <ExerciseDetails
+              key={exercise.id}
+              exercise={exercise}
+              unit={trainingDay.trainingUnit}
+              onPress={showTraining.bind(this, exercise.id)}
+            />
+          ))}
+        </ScrollView>
       </View>
-      <ScrollView style={styles.scrollContainer}>
-        {exercises?.map((exercise) => (
-          <ExerciseDetails key={exercise.id} exercise={exercise} unit={trainingDay.trainingUnit} />
-        ))}
-      </ScrollView>
+      <NewButton
+        title="Delete Training"
+        rootContainerStyle={styles.buttonContainer}
+        onPress={deleteTraining}
+      />
+      {exerciseId && (
+        <UpdateExerciseModal
+          isVisible={exerciseModalIsvisible}
+          changeModalVisibility={() => setExercisleModalIsvisible(false)}
+          exerciseId={exerciseId}
+          trainingId={trainingId}
+        />
+      )}
     </ImageBackground>
   );
 };
@@ -50,23 +78,21 @@ const TrainingDetails = ({ route, navigation }) => {
 export default TrainingDetails;
 
 const styles = StyleSheet.create({
-  container: {
+  ImageContainer: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "#606060",
+    backgroundColor: '#606060',
   },
-  titleContainer: {
-    width: "100%",
-  },
-  titleText: {
-    fontFamily: FONTS.bold,
-    fontSize: SIZES.large,
-    color: COLORS.text,
-    marginVertical: 8,
-    textTransform: "uppercase",
-    textAlign: "center",
+  container: {
+    flex: 0.9,
+    width: '100%',
+    justifyContent: 'flex-start',
   },
   scrollContainer: {
-    width: "100%",
+    width: '100%',
+    height: 700,
+  },
+  buttonContainer: {
+    width: '50%',
+    marginTop: 16,
   },
 });

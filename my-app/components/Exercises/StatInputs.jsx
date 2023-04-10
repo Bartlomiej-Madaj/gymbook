@@ -7,12 +7,19 @@ import { ExerciseContext } from '../../store/exerciseContext';
 
 const inputConfig = { maxLength: 3, keyboardType: 'numeric' };
 
-const StatInputs = ({ adjustEnteredValue, exerciseId, statsId, isClean, changeIsClean }) => {
+const StatInputs = ({
+  adjustEnteredValue,
+  exerciseId,
+  statsId,
+  isClean,
+  changeIsClean,
+}) => {
   const [amountSet, setAmountSet] = useState('');
   const [amountRep, setAmountRep] = useState('');
   const [weight, setWeight] = useState('');
   const [enteredValues, setEnteredValues] = useState();
-  const exerciseCtx = useContext(ExerciseContext)
+  const exerciseCtx = useContext(ExerciseContext);
+  const trainingCtx = useContext(TraningContext);
 
   useEffect(() => {
     setEnteredValues({
@@ -20,22 +27,27 @@ const StatInputs = ({ adjustEnteredValue, exerciseId, statsId, isClean, changeIs
       rep: amountRep,
       weight: weight,
     });
-    changeIsClean && changeIsClean(false)
+    changeIsClean && changeIsClean(false);
   }, [amountSet, amountRep, weight]);
 
   useEffect(() => {
     adjustEnteredValue(enteredValues);
   }, [enteredValues]);
 
-  const currentExercise = exerciseCtx.exercises.find(
-    (item) => item.id === exerciseId
+  const choosenTraining = trainingCtx.trainings?.find(
+    (item) => item.id === trainingCtx.trainingId
   );
+
+  const currentExercise = trainingCtx.trainingId
+    ? choosenTraining.exercises.find((item) => item.id === exerciseId)
+    : exerciseCtx.exercises.find((item) => item.id === exerciseId);
+
   const currentStats = currentExercise?.stats.find(
     (item) => item.id === statsId
   );
 
   useEffect(() => {
-    if(!isClean){
+    if (!isClean) {
       setAmountSet(currentStats?.set);
       setAmountRep(currentStats?.rep);
       setWeight(currentStats?.weight);

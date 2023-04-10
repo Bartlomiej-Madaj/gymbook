@@ -1,11 +1,15 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 
-import { COLORS, SIZES, FONTS } from "../../constants/index/";
+import { COLORS, SIZES, FONTS } from '../../constants/index/';
 
 function Training({ title, date, id, onPress }) {
   return (
     <View style={styles.rootContainer}>
-      <Pressable onPress={onPress} style={styles.container} android_ripple={{ color: "#a6c6f5" }}>
+      <Pressable
+        onPress={onPress}
+        style={styles.container}
+        android_ripple={{ color: '#a6c6f5' }}
+      >
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.date}>{new Date(date).toDateString('en-US')}</Text>
       </Pressable>
@@ -24,24 +28,24 @@ const styles = StyleSheet.create({
     elevation: 6,
     backgroundColor: COLORS.grey,
     opacity: 0.6,
-    overflow: "hidden",
+    overflow: 'hidden',
     shadowColor: '#a6a6a6',
     shadowOpacity: 0.6,
     shadowRadius: 16,
   },
   container: {
     flex: 1,
-    justifyContent: "space-around",
-    alignItems: "center",
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   title: {
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: FONTS.bold,
     fontSize: SIZES.medium,
     color: COLORS.text,
   },
   date: {
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: FONTS.regular,
     fontSize: SIZES.font,
     color: COLORS.text,

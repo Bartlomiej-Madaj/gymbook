@@ -24,13 +24,13 @@ const UpdateStatsModal = ({
 
   function editStatsHandler() {
     exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
-    changeModalVisibility();
     setIsClean(true);
+    changeModalVisibility();
   }
 
   function closeHandler() {
-    changeModalVisibility();
-    setIsClean(true);
+    setIsClean(true)
+    changeModalVisibility()
   }
 
   function adjustEnteredValue(enteredValues) {

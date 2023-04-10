@@ -30,9 +30,7 @@ const ExerciseForm = () => {
   const exerciseCtx = useContext(ExerciseContext)
 
   const { trainingId } = route.params;
-  const exercises = exerciseCtx.exercises;
-
-  console.log(exercises[0].stats)
+  const exercises = exerciseCtx.exercises
 
   const newTraining = trainingCtx.trainings.find((item) =>
     compareItemsById(item.id, trainingId)
@@ -58,6 +56,7 @@ const ExerciseForm = () => {
 
   function finishTrainingHandler() {
     trainingCtx.updateTraining(trainingId);
+    exerciseCtx.clearExercises()
     navigate.navigate('AllTrainings');
   }
 

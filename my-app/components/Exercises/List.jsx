@@ -8,27 +8,32 @@ import { useContext, useEffect, useState } from 'react';
 import ExerciseDetails from './ExerciseDetails.jsx';
 import { ExerciseContext } from '../../store/exerciseContext.js';
 
-const List = ({ title, exerciseName, unit, statsIcon, showUpdateModal, exerciseIcon }) => {
-  const exerciseCtx = useContext(ExerciseContext)
-  const [foundExercise1, setFoundExercise] = useState([])
+const List = ({
+  title,
+  exerciseName,
+  unit,
+  statsIcon,
+  showUpdateModal,
+  exerciseIcon,
+}) => {
+  const exerciseCtx = useContext(ExerciseContext);
+  const [foundExercise, setFoundExercise] = useState([]);
 
-  //add useState!!!
   let data = [];
   data = exerciseCtx.exercises;
 
   useEffect(() => {
     if (exerciseName) {
       const exercise = searchExerciseByName(data, exerciseName);
-      setFoundExercise( [exercise])
+      setFoundExercise([exercise]);
     }
-  },[exerciseName, data])
+  }, [exerciseName, data]);
 
-
-  function showEditExerciseModal(exerciseId){
-    showUpdateModal(exerciseId)
+  function showEditExerciseModal(exerciseId) {
+    showUpdateModal(exerciseId);
   }
 
-  if (!data[0]) {
+  if (!data.at(0)) {
     return (
       <View style={styles.listContainer}>
         <Text style={styles.noteText}>You do not have exercise!</Text>
@@ -39,9 +44,15 @@ const List = ({ title, exerciseName, unit, statsIcon, showUpdateModal, exerciseI
     <View style={styles.listContainer}>
       <Headline>{title}</Headline>
       <FlatList
-        data={exerciseName ? foundExercise1 : data}
-        renderItem={({ item }) => ( 
-          <ExerciseDetails exerciseIcon={exerciseIcon} statsIcon={statsIcon} exercise={item} unit={unit} onPress={showEditExerciseModal.bind(this, item.id)} />
+        data={exerciseName ? foundExercise : data}
+        renderItem={({ item }) => (
+          <ExerciseDetails
+            exerciseIcon={exerciseIcon}
+            statsIcon={statsIcon}
+            exercise={item}
+            unit={unit}
+            onPress={showEditExerciseModal.bind(this, item.id)}
+          />
         )}
         keyExtractor={() => Math.random().toFixed(6)}
       />

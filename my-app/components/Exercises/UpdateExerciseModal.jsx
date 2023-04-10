@@ -23,15 +23,25 @@ const UpdateExerciseModal = ({
   isVisible,
   changeModalVisibility,
   exerciseId,
+  trainingId = '',
 }) => {
   const { height, width } = useWindowDimensions();
   const [exerciseName, setExerciseName] = useState('');
   const [newExercise, setNewExercise] = useState();
   const exerciseCtx = useContext(ExerciseContext);
+  const trainingCtx = useContext(TraningContext);
 
-  const { title: exerciseTitle, stats } = exerciseCtx.exercises.find(
-    (item) => item.id === exerciseId
-  );
+  const exercises =
+    trainingId &&
+    trainingCtx.trainings.find((item) => item.id === trainingId).exercises;
+
+  const { title: exerciseTitle, stats } = trainingId
+    ? exercises.find((item) => item.id === exerciseId)
+    : exerciseCtx.exercises?.find((item) => item.id === exerciseId);
+
+  useEffect(() => {
+    trainingId && exerciseCtx.addExercise(exercises);
+  }, []);
   useEffect(() => {
     setExerciseName(exerciseTitle);
   }, [exerciseTitle]);
@@ -43,6 +53,8 @@ const UpdateExerciseModal = ({
   function updateExerciseHandler() {
     if (!checkFormIsValid(exerciseName)) return;
     exerciseCtx.updateExercise(exerciseId, newExercise);
+    trainingId && trainingCtx.updateTraining(trainingId);
+    trainingId && exerciseCtx.clearExercises();
     changeModalVisibility();
   }
 
@@ -82,7 +94,7 @@ const UpdateExerciseModal = ({
               renderItem={({ item }) => (
                 <EditStatsInput exerciseId={exerciseId} statsId={item.id} />
               )}
-              keyExtractor={item => item.id}
+              keyExtractor={(item) => item.id}
             />
           </View>
           <View

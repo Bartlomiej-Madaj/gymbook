@@ -7,10 +7,13 @@ const EditStatsInput = ({ exerciseId, statsId }) => {
   const [enteredValues, setEnteredValues] = useState();
   const exerciseCtx = useContext(ExerciseContext);
 
-  useEffect(()=>{
-    if(!enteredValues) return;
+  function checkStatsIsEmpty(stats) {
+    return stats && stats.set && stats.rep && stats.weight ? false : true;
+  }
+  useEffect(() => {
+    if (checkStatsIsEmpty(enteredValues)) return;
     exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
-  }, [enteredValues])
+  }, [enteredValues]);
 
   function adjustEnteredValue(enteredValues) {
     setEnteredValues(enteredValues);

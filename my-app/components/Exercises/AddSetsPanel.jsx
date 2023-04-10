@@ -9,18 +9,18 @@ import { ExerciseContext } from '../../store/exerciseContext';
 const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
   const [enteredValues, setEnteredValues] = useState();
   const [isClean, setIsClean] = useState(false);
-  const exerciseCtx = useContext(ExerciseContext)
+  const exerciseCtx = useContext(ExerciseContext);
 
   function addSetHandler() {
     const { set, rep, weight } = enteredValues;
     const enteredStats = new ExerciseStat(set, rep, weight);
     exerciseCtx.addStats(exerciseId, enteredStats);
-    setIsClean(true)
+    setIsClean(true);
   }
 
   function addNewExerciseHandler() {
     showExerciseFormScreen();
-    setIsClean(true)
+    setIsClean(true);
   }
 
   function adjustEnteredValue(enteredValues) {
@@ -29,7 +29,11 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
 
   return (
     <View>
-      <StatInputs adjustEnteredValue={adjustEnteredValue} isClean={isClean} changeIsClean={setIsClean}/>
+      <StatInputs
+        adjustEnteredValue={adjustEnteredValue}
+        isClean={isClean}
+        changeIsClean={setIsClean}
+      />
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <NewButton
           title="New Exercise"

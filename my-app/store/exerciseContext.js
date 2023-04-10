@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 import { compareItemsById } from '../helpers/support-function';
 
 export const ExerciseContext = createContext({
@@ -17,6 +17,9 @@ function ExerciseProvider({ children }) {
 
   function addNewExercice(exercise) {
     if (!newExercise[0]) {
+      if(exercise[0]){
+        return setNewExercise(exercise)
+      }
       return setNewExercise([exercise]);
     }
     setNewExercise((currentExercises) => [exercise, ...currentExercises]);

@@ -15,6 +15,7 @@ export function init() {
           CREATE TABLE IF NOT EXISTS exercises (
                 id INTEGER PRIMARY KEY NOT NULL,
                 title TEXT NOT NULL,
+                training_id INTEGER,
                 FOREIGN KEY(training_id) REFERENCES trainings(id)
           );
           CREATE TABLE IF NOT EXISTS stats (
@@ -22,6 +23,7 @@ export function init() {
               set INTEGER NOT NULL,
               rep INTEGER NOT NULL,
               set INTEGER NOT NULL,
+              exercise_id INTEGER,
               FOREIGN KEY(exercise_id) REFERENCES exercises(id)
             )
             `,

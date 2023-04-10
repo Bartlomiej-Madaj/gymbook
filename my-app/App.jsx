@@ -150,12 +150,12 @@ function App() {
 
 export default App;
 
-const styles = StyleSheet.create({
-  container: {
-    zIndex: -1,
-    flex: 1,
-    backgroundColor: '#ffd0c0',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     zIndex: -1,
+//     flex: 1,
+//     backgroundColor: '#ffd0c0',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });

@@ -1,21 +1,28 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { compareItemsById } from '../helpers/support-function';
-import { ExerciseContext, exercises } from './exerciseContext';
+import { ExerciseContext } from './exerciseContext';
 
 export const TraningContext = createContext({
   trainings: [],
+  trainingId: '',
   addTraining: (training) => {},
   updateTraining: (training) => {},
-
+  adjustTrainingId: (id) => {},
+  deleteTraining: (id) => {}
 });
 
 function TrainingProvider({ children }) {
   const [newTraining, setNewTraining] = useState([]);
   const [newExercise, setNewExercise] = useState([]);
+  const [trainingId, setTrainingId] = useState('')
   const exerciseCtx = useContext(ExerciseContext)
   useEffect(()=>{
     setNewExercise(exerciseCtx.exercises)
   }, [exerciseCtx.exercises])
+
+  function adjustTrainingId(id){
+    setTrainingId(id)
+  }
 
   function addNewTraining(training) {
     if (!newTraining[0]) {
@@ -58,6 +65,10 @@ function TrainingProvider({ children }) {
       });
       return updatedTrainings;
     });
+  }
+
+  function deleteTraining(trainingId){
+    setNewTraining(currentTrainings => currentTrainings.filter(item => item.id !== trainingId))
   }
 
   // function addNewExercice(exercise) {
@@ -182,16 +193,11 @@ function TrainingProvider({ children }) {
 
   const value = {
     trainings: newTraining,
-    // exercises: newExercise,
+    trainingId: trainingId,
     addTraining: addNewTraining,
     updateTraining: updateTraining,
-    // addExercise: addNewExercice,
-    // updateExercise: updateExercise,
-    // deleteExercise: deleteExercise,
-    // addStats: addNewStats,
-    // updateStats: updateStats,
-    // deleteStats: deleteStats,
-    // clearExercises: clearExercises,
+    adjustTrainingId: adjustTrainingId,
+    deleteTraining: deleteTraining,
   };
 
   return (

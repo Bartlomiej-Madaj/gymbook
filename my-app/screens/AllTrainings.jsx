@@ -18,8 +18,6 @@ const AllTrainings = ({ navigation }) => {
   const headerHeight = useHeaderHeight();
   const trainingCtx = useContext(TraningContext);
 
-  // console.log(trainingCtx.trainings)
-
   const trainings = trainingCtx.trainings[0]
     ? [...trainingCtx.trainings, ...DUMMY_TRAININGS]
     : DUMMY_TRAININGS;
