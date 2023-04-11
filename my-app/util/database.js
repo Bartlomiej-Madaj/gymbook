@@ -99,12 +99,12 @@ export function insertTraining(training) {
   return promise;
 }
 
-export function insertExercise(exercise, trainingId) {
+export function insertExercise(exerciseName, trainingId) {
   const promise = new Promise((resolve, reject) => {
     trainingsDatabase.transaction((tx) => {
       tx.executeSql(
         ` INSERT INTO exercises(title, training_id) VALUES (?, ?)`,
-        [exercise.id, exercise.title, trainingId],
+        [exerciseName, trainingId],
         (_, result) => {
           resolve(result);
         },
@@ -122,7 +122,7 @@ export function insertStats(stats, exerciseId) {
     trainingsDatabase.transaction((tx) => {
       tx.executeSql(
         ` INSERT INTO stats(series, rep, weight, exercise_id) VALUES (?, ?, ?, ?)`,
-        [stats.id ,stats.set, stats.rep, stats.weight, exerciseId],
+        [stats.set, stats.rep, stats.weight, exerciseId],
         (_, result) => {
           resolve(result);
         },
@@ -139,7 +139,7 @@ export function selectAllTrainings() {
   const promise = new Promise((resolve, reject) => {
     trainingsDatabase.transaction((tx) => {
       tx.executeSql(
-        `SELECT * FROM trainings`, [],
+        `SELECT * FROM trainings ORDER BY date DESC`, [],
         (_, result) => {
           resolve(result.rows._array);
         },
@@ -152,11 +152,11 @@ export function selectAllTrainings() {
   return promise;
 }
 
-export function selectAllExercises() {
+export function selectAllExercises(trainingId) {
   const promise = new Promise((resolve, reject) => {
     trainingsDatabase.transaction((tx) => {
       tx.executeSql(
-        ` SELECT * FROM exercises`, [],
+        ` SELECT * FROM exercises WHERE training_id = ?`, [trainingId],
         (_, result) => {
           resolve(result.rows._array);
         },

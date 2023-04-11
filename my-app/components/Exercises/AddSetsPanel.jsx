@@ -14,8 +14,8 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
 
   async function addSetHandler() {
     const { set, rep, weight } = enteredValues;
-    const enteredStats = new ExerciseStat(set, rep, weight);
-    const result = await insertStats(enteredStats, exerciseId)
+    const result = await insertStats(enteredValues, exerciseId)
+    const enteredStats = new ExerciseStat(set, rep, weight, result.insertId);
     // console.log(result)
     exerciseCtx.addStats(exerciseId, enteredStats);
     setIsClean(true);

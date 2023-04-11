@@ -32,8 +32,13 @@ const TrainingForm = () => {
       setIsValid(false);
       return setMessageOfInvalidInput('Title and unit cannot be empty!');
     }
-    const training = new Training(enteredTrainigTitle, enteredTrainigUnit);
-    const resulte = await insertTraining(training)
+    const newTraining = {
+      trainingTitle: enteredTrainigTitle,
+      date: Date.now(),
+      trainingUnit: enteredTrainigUnit
+    }
+    const resulte = await insertTraining(newTraining)
+    const training = new Training(newTraining, resulte.insertId);
     // console.log(resulte)
     trainingCtx.addTraining(training);
     setEnteredTrainingTitle('');

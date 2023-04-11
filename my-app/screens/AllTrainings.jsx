@@ -3,6 +3,7 @@ import {
   Text,
   StyleSheet,
   FlatList,
+  ActivityIndicator,
   ImageBackground,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -18,35 +19,30 @@ import { selectAllExercises, selectAllStats, selectAllTrainings } from '../util/
 
 SplashScreen.preventAutoHideAsync();
 
-const AllTrainings = ({ navigation }) => {
+const AllTrainings = ({ navigation, route }) => {
   const headerHeight = useHeaderHeight();
   const trainingCtx = useContext(TraningContext);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [trainings, setTrainings] = useState()
 
-  const trainings = trainingCtx.trainings[0]
-    ? [...trainingCtx.trainings, ...DUMMY_TRAININGS]
-    : DUMMY_TRAININGS;
+  const trainingId  = route.params?.trainingId;
 
-  function showTrainingDetailsHandler(id) {
-    navigation.navigate('TrainingDetails', { trainingId: id });
+  // const trainings = trainingCtx.trainings[0]
+  //   ? [...trainingCtx.trainings, ...DUMMY_TRAININGS]
+  //   : DUMMY_TRAININGS;
+
+  function showTrainingDetailsHandler(id, unit) {
+    navigation.navigate('TrainingDetails', { trainingId: id, trainingUnit: unit });
   }
 
   useEffect(()=>{
     async function getAllTrainings(){
       const trainings = await selectAllTrainings()
-      const exercises =  await selectAllExercises()
-      // trainings.map( async (training) => {
-      //   const exercises =  await selectAllExercises(training.id)
-
-      // })
-      // console.log(exercises)
-      // const stats = await selectAllStats()
+      setTrainings(trainings)
       setIsLoaded(true)
-      // console.log(trainings)
     }
-
     getAllTrainings()
-  }, [])
+  }, [trainingId])
 
   useEffect(() => {
     const hideLoading = async () => {
@@ -60,7 +56,7 @@ const AllTrainings = ({ navigation }) => {
   if (!isLoaded){
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Loading...</Text>
+        <ActivityIndicator size='large' />
       </View>
     );
   }
@@ -78,10 +74,10 @@ const AllTrainings = ({ navigation }) => {
           data={trainings}
           renderItem={({ item }) => (
             <Training
-              title={item.trainingTitle}
+              title={item.title}
               date={item.date}
               id={item.id}
-              onPress={showTrainingDetailsHandler.bind(this, item.id)}
+              onPress={showTrainingDetailsHandler.bind(this, item.id, item.unit)}
             />
           )}
           keyExtractor={(item) => item.id}

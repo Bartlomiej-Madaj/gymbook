@@ -1,11 +1,11 @@
 import uuid from 'react-native-uuid';
 
 export class Training {
-    constructor(title, unit){
-        this.id = uuid.v4(),
-        this.date = Date.now()
-        this.trainingTitle = title,
-        this.trainingUnit = unit,
+    constructor(training, id){
+        this.id = id,
+        this.date = training.date
+        this.trainingTitle = training.trainingTitle,
+        this.trainingUnit = training.trainingUnit,
         this.exercises = []
     }
 }

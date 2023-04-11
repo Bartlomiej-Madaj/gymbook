@@ -17,7 +17,7 @@ import TrainingProvider from './store/traningContext';
 import { initExercise, initStats, initTraining } from './util/database';
 import StatsForm from './screens/StatsForm';
 import ExerciseProvider from './store/exerciseContext';
-import { Text, View } from 'react-native';
+import { Text, View, ActivityIndicator } from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
@@ -132,7 +132,7 @@ function App() {
   if (!dbInitialized){
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="#ff5100" />
       </View>
     );
   }

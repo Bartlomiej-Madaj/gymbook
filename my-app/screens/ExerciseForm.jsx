@@ -45,12 +45,12 @@ const ExerciseForm = () => {
  
   async function addExerciseHandler() {
     if (!exerciseName) return;
-    const newExercise = new Exercise(exerciseName);
-    const result = await insertExercise(newExercise, trainingId)
+    const result = await insertExercise(exerciseName, trainingId)
+    const newExercise = new Exercise(exerciseName, result.insertId);
     // // const result = await selectExercise()
     // console.log(result)
     exerciseCtx.addExercise(newExercise);
-    showStatsForm(newExercise.id);
+    showStatsForm(result.insertId);
   }
 
   function showStatsForm(id) {
@@ -61,7 +61,7 @@ const ExerciseForm = () => {
   function finishTrainingHandler() {
     trainingCtx.updateTraining(trainingId);
     exerciseCtx.clearExercises()
-    navigate.navigate('AllTrainings');
+    navigate.navigate('AllTrainings', {trainingId});
   }
 
   function showUpdateExerciseModal(exerciseId){
