@@ -5,15 +5,18 @@ import { ExerciseStat } from '../../models/exerciseModel';
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 import StatInputs from './StatInputs';
 import { ExerciseContext } from '../../store/exerciseContext';
+import { insertStats } from '../../util/database';
 
 const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
   const [enteredValues, setEnteredValues] = useState();
   const [isClean, setIsClean] = useState(false);
   const exerciseCtx = useContext(ExerciseContext);
 
-  function addSetHandler() {
+  async function addSetHandler() {
     const { set, rep, weight } = enteredValues;
     const enteredStats = new ExerciseStat(set, rep, weight);
+    const result = await insertStats(enteredStats, exerciseId)
+    // console.log(result)
     exerciseCtx.addStats(exerciseId, enteredStats);
     setIsClean(true);
   }

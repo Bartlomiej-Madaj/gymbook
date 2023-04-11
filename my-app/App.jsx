@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet } from 'react-native';
+// import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
+// import AppLoading from 'expo-app-loading';
+import * as SplashScreen from 'expo-splash-screen';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import AllTrainings from './screens/AllTrainings';
@@ -13,9 +14,10 @@ import TrainingForm from './screens/TrainingForm';
 import TrainingDetails from './screens/TrainingDetails';
 import ExerciseForm from './screens/ExerciseForm';
 import TrainingProvider from './store/traningContext';
-import { init } from './util/database';
+import { initExercise, initStats, initTraining } from './util/database';
 import StatsForm from './screens/StatsForm';
 import ExerciseProvider from './store/exerciseContext';
+import { Text, View } from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
@@ -76,6 +78,8 @@ function ShowDrawer() {
   );
 }
 
+SplashScreen.preventAutoHideAsync();
+
 function App() {
   const [loaded] = useFonts({
     InterBold: require('./assets/fonts/Inter-Bold.ttf'),
@@ -85,21 +89,53 @@ function App() {
     InterLight: require('./assets/fonts/Inter-Light.ttf'),
   });
 
-  // const [dbInitialized, setDbInitialized] = useState(false);
+  const [dbInitialized, setDbInitialized] = useState(false);
 
-  // useEffect(() => {
-  //   init()
-  //   .then(() => {
-  //     setDbInitialized(true)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err)
-  //   });
-  // }, [])
+  useEffect(() => {
+    initTraining()
+      .then((result) => {
+        setDbInitialized(true);
+        // console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // .finally(() => setDbInitialized(true))
+    initExercise()
+      .then((result) => {
+        setDbInitialized(true);
+        // console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-  // if(!dbInitialized){
-  //   return <AppLoading />
-  // }
+    initStats()
+      .then((result) => {
+        setDbInitialized(true);
+        // console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    const hideLoading = async () => {
+      if (dbInitialized) {
+        await SplashScreen.hideAsync();
+      }
+    };
+    hideLoading();
+  }, [dbInitialized]);
+
+  if (!dbInitialized){
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   if (!loaded) return null;
   return (

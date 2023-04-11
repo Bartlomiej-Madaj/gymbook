@@ -18,6 +18,7 @@ import List from '../components/Exercises/List';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import UpdateExerciseModal from '../components/Exercises/UpdateExerciseModal';
 import { ExerciseContext } from '../store/exerciseContext';
+import { insertExercise, selectExercise } from '../util/database';
 
 const ExerciseForm = () => {
   const headerHeight = useHeaderHeight();
@@ -42,9 +43,12 @@ const ExerciseForm = () => {
     });
   },[])
  
-  function addExerciseHandler() {
+  async function addExerciseHandler() {
     if (!exerciseName) return;
     const newExercise = new Exercise(exerciseName);
+    const result = await insertExercise(newExercise, trainingId)
+    // // const result = await selectExercise()
+    // console.log(result)
     exerciseCtx.addExercise(newExercise);
     showStatsForm(newExercise.id);
   }

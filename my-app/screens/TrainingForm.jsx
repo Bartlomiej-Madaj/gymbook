@@ -16,6 +16,7 @@ import { useContext, useState } from 'react';
 import { Training } from '../models/trainingModel.js';
 import { TraningContext } from '../store/traningContext.js';
 import { checkFormIsValid } from '../helpers/support-function.js';
+import { insertTraining } from '../util/database.js';
 
 const TrainingForm = () => {
   const headerHeight = useHeaderHeight();
@@ -26,16 +27,18 @@ const TrainingForm = () => {
   const [messageOfInvalidInput, setMessageOfInvalidInput] = useState('');
   const trainingCtx = useContext(TraningContext);
 
-  function goToExerciseForm() {
+  async function goToExerciseForm() {
     if (!checkFormIsValid(enteredTrainigTitle, enteredTrainigUnit)) {
       setIsValid(false);
       return setMessageOfInvalidInput('Title and unit cannot be empty!');
     }
     const training = new Training(enteredTrainigTitle, enteredTrainigUnit);
+    const resulte = await insertTraining(training)
+    // console.log(resulte)
     trainingCtx.addTraining(training);
     setEnteredTrainingTitle('');
     setEnteredTrainingUnit('');
-    navigation.navigate('ExerciseForm', { trainingId: training.id });
+    navigation.navigate('ExerciseForm', { trainingId: resulte.insertId });
   }
 
   return (
