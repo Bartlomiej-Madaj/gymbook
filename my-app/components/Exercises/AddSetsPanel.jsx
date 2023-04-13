@@ -16,7 +16,6 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
     const { set, rep, weight } = enteredValues;
     const result = await insertStats(enteredValues, exerciseId)
     const enteredStats = new ExerciseStat(set, rep, weight, result.insertId);
-    // console.log(result)
     exerciseCtx.addStats(exerciseId, enteredStats);
     setIsClean(true);
   }

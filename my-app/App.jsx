@@ -14,7 +14,7 @@ import TrainingForm from './screens/TrainingForm';
 import TrainingDetails from './screens/TrainingDetails';
 import ExerciseForm from './screens/ExerciseForm';
 import TrainingProvider from './store/traningContext';
-import { initExercise, initStats, initTraining } from './util/database';
+import { deleteDB, initExercise, initStats, initTraining, selectAllDemo } from './util/database';
 import StatsForm from './screens/StatsForm';
 import ExerciseProvider from './store/exerciseContext';
 import { Text, View, ActivityIndicator } from 'react-native';
@@ -89,22 +89,28 @@ function App() {
     InterLight: require('./assets/fonts/Inter-Light.ttf'),
   });
 
+  // useEffect(() => {
+  //   async function getAll(){
+  //     // await deleteDB()
+  //     const result = await selectAllDemo()
+  //     // console.log(result)
+  //   }
+  //   getAll();
+  // })
+
   const [dbInitialized, setDbInitialized] = useState(false);
 
   useEffect(() => {
     initTraining()
       .then((result) => {
         setDbInitialized(true);
-        // console.log(result);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err)
       });
-    // .finally(() => setDbInitialized(true))
     initExercise()
       .then((result) => {
         setDbInitialized(true);
-        // console.log(result);
       })
       .catch((err) => {
         console.log(err);
@@ -113,7 +119,6 @@ function App() {
     initStats()
       .then((result) => {
         setDbInitialized(true);
-        // console.log(result);
       })
       .catch((err) => {
         console.log(err);

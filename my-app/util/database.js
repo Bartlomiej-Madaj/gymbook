@@ -139,7 +139,26 @@ export function selectAllTrainings() {
   const promise = new Promise((resolve, reject) => {
     trainingsDatabase.transaction((tx) => {
       tx.executeSql(
-        `SELECT * FROM trainings ORDER BY date DESC`, [],
+        `SELECT * FROM trainings ORDER BY date DESC`,
+        [],
+        (_, result) => {
+          resolve(result.rows._array);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export function selectOneTrainings(trainingId) {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM trainings WHERE id =?`,
+        [trainingId],
         (_, result) => {
           resolve(result.rows._array);
         },
@@ -156,7 +175,8 @@ export function selectAllExercises(trainingId) {
   const promise = new Promise((resolve, reject) => {
     trainingsDatabase.transaction((tx) => {
       tx.executeSql(
-        ` SELECT * FROM exercises WHERE training_id = ?`, [trainingId],
+        ` SELECT * FROM exercises WHERE training_id = ?`,
+        [trainingId],
         (_, result) => {
           resolve(result.rows._array);
         },
@@ -170,11 +190,210 @@ export function selectAllExercises(trainingId) {
 }
 
 export function selectAllStats(exerciseId) {
- 
   const promise = new Promise((resolve, reject) => {
     trainingsDatabase.transaction((tx) => {
       tx.executeSql(
-        ` SELECT * FROM stats WHERE exercise_id = ? `, [exerciseId],
+        ` SELECT * FROM stats WHERE exercise_id = ?
+         `,
+        [exerciseId],
+        (_, result) => {
+          resolve(result.rows._array);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export function deleteTraining(trainingId) {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM stats WHERE exercise_id = (SELECT id FROM exercises WHERE training_id = ?)`,
+        [trainingId],
+        (_, result) => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM exercises WHERE training_id = ? `,
+        [trainingId],
+        (_, result) => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM trainings WHERE id = ? `,
+        [trainingId],
+        (_, result) => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error)
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+// export function deleteExercisesByTraining_id(trainingId) {
+//   const promise = new Promise((resolve, reject) => {
+//     trainingsDatabase.transaction((tx) => {
+//       tx.executeSql(
+//         `  DELETE FROM exercises WHERE training_id = ? `,
+//         [trainingId],
+//         (_, result) => {
+//           resolve();
+//         },
+//         (_, error) => {
+//           reject(error);
+//         }
+//       );
+//     });
+//   });
+//   return promise;
+// }
+
+export function deleteExercise(exerciseId) {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        ` DELETE FROM stats WHERE exercise_id = ? `,
+        [exerciseId],
+        (_, result) => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        ` DELETE FROM exercises WHERE id = ? `,
+        [exerciseId],
+        (_, result) => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export function deleteStat(statId) {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        ` DELETE FROM stats WHERE id = ? `,
+        [statId],
+        (_, result) => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export function updateStat(newStat, statId) {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        ` UPDATE stats SET series = ?, rep = ?, weight = ? WHERE id = ? `,
+        [newStat.set, newStat.rep, newStat.weight, statId],
+        (_, result) => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export function updateExercise(newExerciseTitle, exerciseId) {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        ` UPDATE exercises SET title = ? WHERE id = ? `,
+        [newExerciseTitle, exerciseId],
+        (_, result) => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export function selectOneExercise(exerciseId) {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        ` SELECT * FROM exercises WHERE id = ?`,
+        [exerciseId],
+        (_, result) => {
+          resolve(result.rows._array);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export function selectAllDemo() {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        ` SELECT * FROM stats `,
+        [],
+        (_, result) => {
+          resolve(result.rows._array);
+        },
+        (_, error) => {
+          reject(error)
+        }
+      );
+    });
+  });
+  return promise;
+}
+
+export function deleteDB() {
+  const promise = new Promise((resolve, reject) => {
+    trainingsDatabase.transaction((tx) => {
+      tx.executeSql(
+        ` DELETE FROM stats `,
+        [],
         (_, result) => {
           resolve(result.rows._array);
         },

@@ -21,15 +21,9 @@ SplashScreen.preventAutoHideAsync();
 
 const AllTrainings = ({ navigation, route }) => {
   const headerHeight = useHeaderHeight();
-  const trainingCtx = useContext(TraningContext);
+  // const trainingCtx = useContext(TraningContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [trainings, setTrainings] = useState()
-
-  const trainingId  = route.params?.trainingId;
-
-  // const trainings = trainingCtx.trainings[0]
-  //   ? [...trainingCtx.trainings, ...DUMMY_TRAININGS]
-  //   : DUMMY_TRAININGS;
 
   function showTrainingDetailsHandler(id, unit) {
     navigation.navigate('TrainingDetails', { trainingId: id, trainingUnit: unit });
@@ -42,7 +36,7 @@ const AllTrainings = ({ navigation, route }) => {
       setIsLoaded(true)
     }
     getAllTrainings()
-  }, [trainingId])
+  }, [trainings])
 
   useEffect(() => {
     const hideLoading = async () => {
@@ -76,7 +70,7 @@ const AllTrainings = ({ navigation, route }) => {
             <Training
               title={item.title}
               date={item.date}
-              id={item.id}
+              // id={item.id}
               onPress={showTrainingDetailsHandler.bind(this, item.id, item.unit)}
             />
           )}

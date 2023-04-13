@@ -6,6 +6,7 @@ export const TraningContext = createContext({
   trainings: [],
   trainingId: '',
   addTraining: (training) => {},
+  addTrainingFromDB: (training) => {},
   updateTraining: (training) => {},
   adjustTrainingId: (id) => {},
   deleteTraining: (id) => {}
@@ -22,6 +23,10 @@ function TrainingProvider({ children }) {
 
   function adjustTrainingId(id){
     setTrainingId(id)
+  }
+
+  function addTraining(training){
+    setNewTraining([training]);
   }
 
   function addNewTraining(training) {
@@ -195,6 +200,7 @@ function TrainingProvider({ children }) {
     trainings: newTraining,
     trainingId: trainingId,
     addTraining: addNewTraining,
+    addTrainingFromDB: addTraining,
     updateTraining: updateTraining,
     adjustTrainingId: adjustTrainingId,
     deleteTraining: deleteTraining,

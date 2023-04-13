@@ -4,36 +4,60 @@ import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
 import Headline from '../Text/Headline';
 import { searchExerciseByName } from '../../helpers/support-function.js';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import ExerciseDetails from './ExerciseDetails.jsx';
 import { ExerciseContext } from '../../store/exerciseContext.js';
+import { selectAllExercises } from '../../util/database.js';
 
 const List = ({
   title,
   exerciseName,
   unit,
-  statsIcon,
-  showUpdateModal,
   exerciseIcon,
+  statsIcon,
+  trainingId,
+  exerciseId,
+  showUpdateModal,
+  toRenderList
 }) => {
   const exerciseCtx = useContext(ExerciseContext);
   const [foundExercise, setFoundExercise] = useState([]);
+  const [exercises, setExercises] = useState([]);
 
-  let data = [];
-  data = exerciseCtx.exercises;
+  // let data = [];
+  // data = exerciseCtx.exercises;
 
-  useEffect(() => {
-    if (exerciseName) {
-      const exercise = searchExerciseByName(data, exerciseName);
-      setFoundExercise([exercise]);
+  useLayoutEffect(()=>{
+    async function getExercises() {
+      const exercises = await selectAllExercises(trainingId);
+      setExercises(exercises)
+      // const trainings = await selectAllTrainings();
+      // const currentTraining = trainings.find(item => item.id === trainingId)
+      const currentExercise = exercises.find(item => item.id === exerciseId)
+      // console.log(currentTraining)
+      // setCurrentTraining(currentTraining)
+      setFoundExercise([currentExercise])
     }
-  }, [exerciseName, data]);
+    getExercises()
+
+    //toRenderList is for test
+  }, [trainingId, exerciseId, toRenderList])
+
+  // console.log(exercises)
+  // console.log(exercises);
+
+  // useEffect(() => {
+  //   if (exerciseName) {
+  //     const exercise = searchExerciseByName(data, exerciseName);
+  //     setFoundExercise([exercise]);
+  //   }
+  // }, [exerciseName, data]);
 
   function showEditExerciseModal(exerciseId) {
     showUpdateModal(exerciseId);
   }
 
-  if (!data.at(0)) {
+  if (!exercises.at(0)) {
     return (
       <View style={styles.listContainer}>
         <Text style={styles.noteText}>You do not have exercise!</Text>
@@ -44,11 +68,12 @@ const List = ({
     <View style={styles.listContainer}>
       <Headline>{title}</Headline>
       <FlatList
-        data={exerciseName ? foundExercise : data}
+        data={exerciseId ? foundExercise : exercises}
         renderItem={({ item }) => (
           <ExerciseDetails
             exerciseIcon={exerciseIcon}
             statsIcon={statsIcon}
+            exerciseId = {exerciseId}
             exercise={item}
             unit={unit}
             onPress={showEditExerciseModal.bind(this, item.id)}

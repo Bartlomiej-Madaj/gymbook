@@ -56,7 +56,7 @@ const StatInputs = ({
       setAmountRep('');
       setWeight('');
     }
-  }, [isClean]);
+  }, [isClean])
 
   return (
     <View style={styles.inputsContainer}>

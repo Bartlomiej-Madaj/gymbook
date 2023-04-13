@@ -18,7 +18,7 @@ import List from '../components/Exercises/List';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import UpdateExerciseModal from '../components/Exercises/UpdateExerciseModal';
 import { ExerciseContext } from '../store/exerciseContext';
-import { insertExercise, selectExercise } from '../util/database';
+import { insertExercise, selectAllExercises, selectExercise } from '../util/database';
 
 const ExerciseForm = () => {
   const headerHeight = useHeaderHeight();
@@ -28,14 +28,27 @@ const ExerciseForm = () => {
   const navigate = useNavigation();
   const route = useRoute();
   const trainingCtx = useContext(TraningContext);
-  const exerciseCtx = useContext(ExerciseContext)
+  const exerciseCtx = useContext(ExerciseContext);
+  // const {exercises, setExercises} = useState([])
+  // const [exerciseId, setExerciseId] = useState('')
 
-  const { trainingId } = route.params;
-  const exercises = exerciseCtx.exercises
+  const { trainingId, toRenderList } = route.params;
+  // const exercises = exerciseCtx.exercises
 
   const newTraining = trainingCtx.trainings.find((item) =>
     compareItemsById(item.id, trainingId)
   );
+
+  // useEffect(()=>{
+  //   async function getExercises(){
+  //     const exercises = await selectAllExercises(trainingId)
+  //     setExercises(exercises)
+  //   }
+  //   getExercises()
+
+  // }, [trainingId])
+
+  // console.log(exercises)
 
   useEffect(() => {
     navigate.setOptions({
@@ -50,6 +63,7 @@ const ExerciseForm = () => {
     // // const result = await selectExercise()
     // console.log(result)
     exerciseCtx.addExercise(newExercise);
+    // setExerciseId(result.insertId)
     showStatsForm(result.insertId);
   }
 
@@ -61,7 +75,7 @@ const ExerciseForm = () => {
   function finishTrainingHandler() {
     trainingCtx.updateTraining(trainingId);
     exerciseCtx.clearExercises()
-    navigate.navigate('AllTrainings', {trainingId});
+    navigate.navigate('AllTrainings');
   }
 
   function showUpdateExerciseModal(exerciseId){
@@ -105,8 +119,11 @@ const ExerciseForm = () => {
         </View>
         <List
           title="Your Exercises"
-          data={exercises}
+          // data={exercises}
+          toRenderList={toRenderList}
           unit={newTraining.trainingUnit}
+          trainingId = {trainingId}
+          //  exerciseId = {exerciseId}
           showUpdateModal={showUpdateExerciseModal}
           exerciseIcon={true}
         />

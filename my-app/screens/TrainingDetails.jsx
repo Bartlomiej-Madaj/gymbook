@@ -16,7 +16,7 @@ import { ExerciseContext } from '../store/exerciseContext.js';
 import NewButton from '../components/UI/NewButton.jsx';
 import * as SplashScreen from 'expo-splash-screen';
 import { Exercise, ExerciseStat } from '../models/exerciseModel.js';
-import { selectAllExercises, selectAllStats } from '../util/database.js';
+import { deleteTraining, selectAllExercises, selectAllStats, selectOneTrainings } from '../util/database.js';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,7 +29,6 @@ const TrainingDetails = ({ route, navigation }) => {
   const [exercises, setExercises] = useState([]);
 
   // const trainings = [...trainingCtx.trainings, ...DUMMY_TRAININGS];
-
   const {trainingId, trainingUnit} = route.params;
   // useEffect(() => {
   //   trainingCtx.adjustTrainingId(trainingId);
@@ -46,9 +45,9 @@ const TrainingDetails = ({ route, navigation }) => {
         const stats = await selectAllStats(exercise.id);
         stats.map((stat) => {
           const statsFromDb = new ExerciseStat(
-            stat.series,
-            stat.rep,
-            stat.weight,
+            stat.series.toString(),
+            stat.rep.toString(),
+            stat.weight.toString(),
             stat.id
           );
           exerciseFromDb.addStats(statsFromDb);
@@ -62,6 +61,29 @@ const TrainingDetails = ({ route, navigation }) => {
     getExercises();
   }, [trainingId]);
 
+  const [training, setTraining] = useState()
+
+  useEffect(() => {
+    async function getOneTraining(){
+      const training = await selectOneTrainings(trainingId)
+      // console.log(training)
+      setTraining({
+        ...training[0],
+        exercises: exercises
+      })
+    }
+    
+    getOneTraining()
+  }, [trainingId, exercises])
+  
+  useEffect(() => {
+    trainingCtx.addTrainingFromDB(training)
+
+  },[training])
+
+
+  // console.log(trainingCtx.trainings)
+
   // useLayoutEffect(() => {
   //   navigation.setOptions({
   //     headerTitle: trainingDay.trainingTitle.toUpperCase(),
@@ -72,8 +94,9 @@ const TrainingDetails = ({ route, navigation }) => {
     setExerciseId(exerciseId);
     setExercisleModalIsvisible(true);
   }
-  function deleteTraining() {
-    trainingCtx.deleteTraining(trainingId);
+  async function removeTraining() {
+    // trainingCtx.deleteTraining(trainingId);
+    await deleteTraining(trainingId)
     navigation.navigate('AllTrainings');
   }
 
@@ -116,7 +139,7 @@ const TrainingDetails = ({ route, navigation }) => {
       <NewButton
         title="Delete Training"
         rootContainerStyle={styles.buttonContainer}
-        onPress={deleteTraining}
+        onPress={removeTraining}
       />
       {exerciseId && (
         <UpdateExerciseModal

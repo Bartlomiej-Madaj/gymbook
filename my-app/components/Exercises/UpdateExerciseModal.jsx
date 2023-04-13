@@ -3,8 +3,6 @@ import {
   Text,
   Modal,
   StyleSheet,
-  TextInput,
-  ScrollView,
   FlatList,
 } from 'react-native';
 import { useWindowDimensions } from 'react-native';
@@ -18,6 +16,7 @@ import { checkFormIsValid } from '../../helpers/support-function.js';
 import { ExerciseContext } from '../../store/exerciseContext.js';
 import UpdateStatsModal from './UpdateStatsModal.jsx';
 import EditStatsInput from './EditStatsInput.jsx';
+import { selectAllExercises, selectAllStats, selectOneExercise, updateExercise } from '../../util/database.js';
 
 const UpdateExerciseModal = ({
   isVisible,
@@ -28,6 +27,7 @@ const UpdateExerciseModal = ({
   const { height, width } = useWindowDimensions();
   const [exerciseName, setExerciseName] = useState('');
   const [newExercise, setNewExercise] = useState();
+  // const [exercises, setExercises] = useState([])
   const exerciseCtx = useContext(ExerciseContext);
   const trainingCtx = useContext(TraningContext);
 
@@ -35,9 +35,28 @@ const UpdateExerciseModal = ({
     trainingId &&
     trainingCtx.trainings.find((item) => item.id === trainingId).exercises;
 
+  //TU zacznij!!!!!!!!!!!!!!!!!!!!!
+  // useEffect(() => {
+  //   if(!trainingId) return
+  //   async function getExercises(){
+  //     const exercise = await selectAllExercises(trainingId)
+  //     // console.log(exercise)
+  //     // const exercise = await selectOneExercise(exerciseId)
+  //     // console.log(exercise)
+  //     // const stats = await selectAllStats(exerciseId)
+  //     setExercises(exercise)
+  //   }
+  //   getExercises()
+  // }, [exerciseId])
+
+  // console.log(exerciseId)
+
   const { title: exerciseTitle, stats } = trainingId
-    ? exercises.find((item) => item.id === exerciseId)
+    ? exercises?.find((item) => item.id === exerciseId)
     : exerciseCtx.exercises?.find((item) => item.id === exerciseId);
+// console.log(stats)
+
+
 
   useEffect(() => {
     trainingId && exerciseCtx.addExercise(exercises);
@@ -50,8 +69,11 @@ const UpdateExerciseModal = ({
     setNewExercise({ title: exerciseName });
   }, [exerciseName]);
 
-  function updateExerciseHandler() {
+  async function updateExerciseHandler() {
     if (!checkFormIsValid(exerciseName)) return;
+    await updateExercise(exerciseName, exerciseId)
+    // const result = await selectOneExercise(exerciseId)
+    // console.log(result)
     exerciseCtx.updateExercise(exerciseId, newExercise);
     trainingId && trainingCtx.updateTraining(trainingId);
     trainingId && exerciseCtx.clearExercises();

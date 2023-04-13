@@ -2,6 +2,7 @@ import { View, StyleSheet } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import StatInputs from './StatInputs';
 import { ExerciseContext } from '../../store/exerciseContext';
+import { updateStat } from '../../util/database';
 
 const EditStatsInput = ({ exerciseId, statsId }) => {
   const [enteredValues, setEnteredValues] = useState();
@@ -12,7 +13,11 @@ const EditStatsInput = ({ exerciseId, statsId }) => {
   }
   useEffect(() => {
     if (checkStatsIsEmpty(enteredValues)) return;
-    exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
+    async function updateStats(){
+      await updateStat(enteredValues, statsId)
+      exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
+    }
+    updateStats()
   }, [enteredValues]);
 
   function adjustEnteredValue(enteredValues) {

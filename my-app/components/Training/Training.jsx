@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 import { COLORS, SIZES, FONTS } from '../../constants/index/';
 
-function Training({ title, date, id, onPress }) {
+function Training({ title, date, onPress }) {
   return (
     <View style={styles.rootContainer}>
       <Pressable

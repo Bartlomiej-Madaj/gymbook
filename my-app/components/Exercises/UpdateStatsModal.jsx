@@ -8,6 +8,7 @@ import { useContext, useState } from 'react';
 import StatInputs from './StatInputs.jsx';
 import { ExerciseContext } from '../../store/exerciseContext.js';
 import useManageInput from '../../hooks/useManageInput.jsx';
+import { updateStat } from '../../util/database.js';
 
 const UpdateStatsModal = ({
   isVisible,
@@ -22,7 +23,8 @@ const UpdateStatsModal = ({
   const [isClean, setIsClean] = useState(false);
   const exerciseCtx = useContext(ExerciseContext);
 
-  function editStatsHandler() {
+  async function editStatsHandler() {
+    await updateStat(enteredValues, statsId)
     exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
     setIsClean(true);
     changeModalVisibility();
