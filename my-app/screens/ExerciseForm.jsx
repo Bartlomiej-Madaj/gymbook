@@ -30,7 +30,7 @@ const ExerciseForm = () => {
   const trainingCtx = useContext(TraningContext);
   const exerciseCtx = useContext(ExerciseContext);
   // const {exercises, setExercises} = useState([])
-  // const [exerciseId, setExerciseId] = useState('')
+  const [exerciseId, setExerciseId] = useState('')
 
   const { trainingId, toRenderList } = route.params;
   // const exercises = exerciseCtx.exercises
@@ -60,10 +60,8 @@ const ExerciseForm = () => {
     if (!exerciseName) return;
     const result = await insertExercise(exerciseName, trainingId)
     const newExercise = new Exercise(exerciseName, result.insertId);
-    // // const result = await selectExercise()
-    // console.log(result)
     exerciseCtx.addExercise(newExercise);
-    // setExerciseId(result.insertId)
+    setExerciseId(result.insertId)
     showStatsForm(result.insertId);
   }
 
@@ -120,10 +118,10 @@ const ExerciseForm = () => {
         <List
           title="Your Exercises"
           // data={exercises}
-          toRenderList={toRenderList}
+          // toRenderList={toRenderList}
           unit={newTraining.trainingUnit}
-          trainingId = {trainingId}
-          //  exerciseId = {exerciseId}
+          // trainingId = {trainingId}
+          // exerciseId = {exerciseId}
           showUpdateModal={showUpdateExerciseModal}
           exerciseIcon={true}
         />

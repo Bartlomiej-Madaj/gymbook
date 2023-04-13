@@ -15,43 +15,43 @@ const List = ({
   unit,
   exerciseIcon,
   statsIcon,
-  trainingId,
+  // trainingId,
   exerciseId,
   showUpdateModal,
-  toRenderList
+  // toRenderList
 }) => {
   const exerciseCtx = useContext(ExerciseContext);
   const [foundExercise, setFoundExercise] = useState([]);
-  const [exercises, setExercises] = useState([]);
+  // const [exercises, setExercises] = useState([]);
 
-  // let data = [];
-  // data = exerciseCtx.exercises;
+  let exercises = [];
+  exercises = exerciseCtx.exercises;
 
-  useLayoutEffect(()=>{
-    async function getExercises() {
-      const exercises = await selectAllExercises(trainingId);
-      setExercises(exercises)
-      // const trainings = await selectAllTrainings();
-      // const currentTraining = trainings.find(item => item.id === trainingId)
-      const currentExercise = exercises.find(item => item.id === exerciseId)
-      // console.log(currentTraining)
-      // setCurrentTraining(currentTraining)
-      setFoundExercise([currentExercise])
-    }
-    getExercises()
+  // useLayoutEffect(()=>{
+  //   async function getExercises() {
+  //     const exercises = await selectAllExercises(trainingId);
+  //     setExercises(exercises)
+  //     // const trainings = await selectAllTrainings();
+  //     // const currentTraining = trainings.find(item => item.id === trainingId)
+  //     const currentExercise = exercises.find(item => item.id === exerciseId)
+  //     // console.log(currentTraining)
+  //     // setCurrentTraining(currentTraining)
+  //     setFoundExercise([currentExercise])
+  //   }
+  //   getExercises()
 
-    //toRenderList is for test
-  }, [trainingId, exerciseId, toRenderList])
+  //   //toRenderList is for test
+  // }, [trainingId, exerciseId, toRenderList])
 
   // console.log(exercises)
   // console.log(exercises);
 
-  // useEffect(() => {
-  //   if (exerciseName) {
-  //     const exercise = searchExerciseByName(data, exerciseName);
-  //     setFoundExercise([exercise]);
-  //   }
-  // }, [exerciseName, data]);
+  useEffect(() => {
+    if (exerciseName) {
+      const exercise = searchExerciseByName(exercises, exerciseName);
+      setFoundExercise([exercise]);
+    }
+  }, [exerciseName, exercises]);
 
   function showEditExerciseModal(exerciseId) {
     showUpdateModal(exerciseId);

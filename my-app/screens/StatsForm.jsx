@@ -75,7 +75,7 @@ const StatsForm = () => {
         <List
           statsIcon={true}
           title="Your Exercise"
-          // exerciseName={currentExercise.title}
+          exerciseName={currentExercise.title}
           trainingId = {trainingId}
           exerciseId = {exerciseId}
           // data={currentExercise}

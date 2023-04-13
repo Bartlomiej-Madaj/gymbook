@@ -11,26 +11,26 @@ const ExerciseDetails = ({ exercise, unit, statsIcon, onPress, exerciseIcon }) =
 
   const [exerciseModalIsVisible, setExerciseModalIsVisible ] = useState(false)
   const [statsId, setStatsId] = useState('')
-  const [stats, setStats] = useState([])
+  // const [stats, setStats] = useState([])
   const exerciseCtx = useContext(ExerciseContext)
 
-  useEffect(()=>{
-    async function getStats() {
-      const stats = await selectAllStats(exercise.id);
-      setStats(stats)
-      // console.log(stats)
-      // const trainings = await selectAllTrainings();
-      // const currentTraining = trainings.find(item => item.id === trainingId)
-      // const currentExercise = exercises.find(item => item.id === exerciseId)
-      // console.log(currentTraining)
-      // setCurrentTraining(currentTraining)
-      // setFoundExercise(currentExercise)
-    }
-    getStats()
-  }, [exercise.id])
+  // useEffect(()=>{
+  //   async function getStats() {
+  //     // const stats = await selectAllStats(exercise.id);
+  //     // setStats(stats)
+  //     // console.log(stats)
+  //     // const trainings = await selectAllTrainings();
+  //     // const currentTraining = trainings.find(item => item.id === trainingId)
+  //     // const currentExercise = exercises.find(item => item.id === exerciseId)
+  //     // console.log(currentTraining)
+  //     // setCurrentTraining(currentTraining)
+  //     // setFoundExercise(currentExercise)
+  //   }
+  //   getStats()
+  // }, [exercise.id])
   // console.log(stats)
 
-  // const { stats, title, id } = exercise;
+  const { stats, title, id } = exercise;
   const styleWithIcon = {
     width: statsIcon ? '25%' : '30%'
   }
@@ -49,7 +49,6 @@ const ExerciseDetails = ({ exercise, unit, statsIcon, onPress, exerciseIcon }) =
   }
   async function removeExercise(){
     await deleteExercise(exercise.id)
-    // console.log('działa')
     exerciseCtx.deleteExercise(exercise.id)
   }
   return (
@@ -65,9 +64,9 @@ const ExerciseDetails = ({ exercise, unit, statsIcon, onPress, exerciseIcon }) =
         </View>
         {stats.map((stat) => (
           <View key={stat.id} style={styles.statsContainer}>
-            <Text style={[styles.stats, styleWithIcon]}> {stat.series} </Text>
-            <Text style={[styles.stats, styleWithIcon]}> {stat.rep} </Text>
-            <Text style={[styles.stats, styleWithIcon]}> {stat.weight}</Text>
+            <Text style={[styles.stats, styleWithIcon]}>{stat.set}</Text>
+            <Text style={[styles.stats, styleWithIcon]}>{stat.rep}</Text>
+            <Text style={[styles.stats, styleWithIcon]}>{stat.weight}</Text>
             {statsIcon && <View style={styles.iconsBox}>
               <AntDesignIcon name='edit' size={24} color={'white'} onPress={showEditStatsModal.bind(this, stat.id)} />
               <AntDesignIcon name='delete' size={24} color={'white'} onPress={removeStat.bind(this, stat.id)} />

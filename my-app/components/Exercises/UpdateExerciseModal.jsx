@@ -16,7 +16,7 @@ import { checkFormIsValid } from '../../helpers/support-function.js';
 import { ExerciseContext } from '../../store/exerciseContext.js';
 import UpdateStatsModal from './UpdateStatsModal.jsx';
 import EditStatsInput from './EditStatsInput.jsx';
-import { selectAllExercises, selectAllStats, selectOneExercise, updateExercise } from '../../util/database.js';
+import { updateExercise } from '../../util/database.js';
 
 const UpdateExerciseModal = ({
   isVisible,
@@ -54,9 +54,6 @@ const UpdateExerciseModal = ({
   const { title: exerciseTitle, stats } = trainingId
     ? exercises?.find((item) => item.id === exerciseId)
     : exerciseCtx.exercises?.find((item) => item.id === exerciseId);
-// console.log(stats)
-
-
 
   useEffect(() => {
     trainingId && exerciseCtx.addExercise(exercises);
@@ -72,8 +69,6 @@ const UpdateExerciseModal = ({
   async function updateExerciseHandler() {
     if (!checkFormIsValid(exerciseName)) return;
     await updateExercise(exerciseName, exerciseId)
-    // const result = await selectOneExercise(exerciseId)
-    // console.log(result)
     exerciseCtx.updateExercise(exerciseId, newExercise);
     trainingId && trainingCtx.updateTraining(trainingId);
     trainingId && exerciseCtx.clearExercises();
