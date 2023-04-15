@@ -2,7 +2,14 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
-const NewButton = ({ onPress, title, containerStyle, textStyle, rootContainerStyle, disabled=false }) => {
+const NewButton = ({
+  onPress,
+  title,
+  containerStyle,
+  textStyle,
+  rootContainerStyle,
+  disabled = false,
+}) => {
   return (
     <View style={[styles.rootContainer, rootContainerStyle]}>
       <Pressable

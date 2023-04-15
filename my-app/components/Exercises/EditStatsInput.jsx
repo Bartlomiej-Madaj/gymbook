@@ -2,15 +2,13 @@ import { View, StyleSheet } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import StatInputs from './StatInputs';
 import { ExerciseContext } from '../../store/exerciseContext';
-import { updateStat } from '../../util/database';
+import { updateStat } from '../../util/db/statHelper';
+import { checkStatsIsEmpty } from '../../helpers/support-function';
 
 const EditStatsInput = ({ exerciseId, statsId }) => {
   const [enteredValues, setEnteredValues] = useState();
   const exerciseCtx = useContext(ExerciseContext);
 
-  function checkStatsIsEmpty(stats) {
-    return stats && stats.set && stats.rep && stats.weight ? false : true;
-  }
   useEffect(() => {
     if (checkStatsIsEmpty(enteredValues)) return;
     async function updateStats(){

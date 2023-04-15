@@ -1,11 +1,11 @@
 import { View, StyleSheet } from 'react-native';
 import React, { useContext, useState } from 'react';
+
 import NewButton from '../UI/NewButton';
-import { ExerciseStat } from '../../models/exerciseModel';
-import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 import StatInputs from './StatInputs';
+import { ExerciseStat } from '../../models/exerciseModel';
 import { ExerciseContext } from '../../store/exerciseContext';
-import { insertStats } from '../../util/database';
+import { insertStats } from '../../util/db/statHelper';
 
 const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
   const [enteredValues, setEnteredValues] = useState();
@@ -14,7 +14,7 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
 
   async function addSetHandler() {
     const { set, rep, weight } = enteredValues;
-    const result = await insertStats(enteredValues, exerciseId)
+    const result = await insertStats(enteredValues, exerciseId);
     const enteredStats = new ExerciseStat(set, rep, weight, result.insertId);
     exerciseCtx.addStats(exerciseId, enteredStats);
     setIsClean(true);
@@ -36,7 +36,7 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
         isClean={isClean}
         changeIsClean={setIsClean}
       />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+      <View style={styles.buttonContainer}>
         <NewButton
           title="New Exercise"
           onPress={addNewExerciseHandler}
@@ -55,20 +55,8 @@ const AddSetsPanel = ({ exerciseId, showExerciseFormScreen }) => {
 export default AddSetsPanel;
 
 const styles = StyleSheet.create({
-  inputsContainer: {
+  buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  inputContainer: {
-    width: '30%',
-  },
-  inputBox: {
-    backgroundColor: '#ffffff7e',
-    borderColor: COLORS.secondary,
-    borderRadius: 8,
-  },
-  labelText: {
-    color: 'white',
+    justifyContent: 'space-evenly',
   },
 });

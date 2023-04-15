@@ -10,51 +10,28 @@ import AddSetsPanel from '../components/Exercises/AddSetsPanel';
 import List from '../components/Exercises/List';
 import Headline from '../components/Text/Headline';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useContext, useEffect, useState } from 'react';
-import { TraningContext } from '../store/traningContext';
-import { compareItemsById } from '../helpers/support-function';
-import { ExerciseContext } from '../store/exerciseContext';
-import { selectAllExercises, selectAllTrainings } from '../util/database';
+import { useEffect } from 'react';
+import { getCurrentTraining } from '../helpers/getCurrentTraining';
+import { getCurrentExercise } from '../helpers/getCurrentExercise';
 
 const StatsForm = () => {
   const headerHeight = useHeaderHeight();
   const navigate = useNavigation();
   const route = useRoute();
-  const trainingCtx = useContext(TraningContext);
-  const exerciseCtx = useContext(ExerciseContext);
-  // const [currentExercise, setCurrentExercise] = useState({})
-  // const [currentTraining, setCurrentTraining] = useState({})
 
   const { exerciseId, trainingId } = route.params
 
-  const currentTraining = trainingCtx.trainings.find(training => compareItemsById(training.id, trainingId))
-  const currentExercise = exerciseCtx.exercises.find(exercise => compareItemsById(exercise.id, exerciseId))
-
-  // useEffect(()=>{
-  //   async function getExercises() {
-  //     const exercises = await selectAllExercises(trainingId);
-  //     const trainings = await selectAllTrainings();
-  //     const currentTraining = trainings.find(item => item.id === trainingId)
-  //     const currentExercise = exercises.find(item => item.id === exerciseId)
-  //     // console.log(currentTraining)
-  //     setCurrentTraining(currentTraining)
-  //     setCurrentExercise(currentExercise)
-  //   }
-  //   getExercises()
-  // }, [exerciseId])
-
-  const {trainingTitle, trainingUnit } = currentTraining
-  // const {title, unit } = currentTraining
-
+  const {trainingTitle, trainingUnit } = getCurrentTraining(trainingId)
+  const { title } = getCurrentExercise(exerciseId)
+  
   useEffect(() => {
     navigate.setOptions({
       title: trainingTitle.toUpperCase()
-      // title: title?.toUpperCase()
     })
   },[])
 
   function showExerciseFormScreen(){
-    navigate.navigate('ExerciseForm', {trainingId: trainingId, toRenderList: Math.random() })
+    navigate.navigate('ExerciseForm', {trainingId: trainingId })
   }
 
   return (
@@ -65,8 +42,8 @@ const StatsForm = () => {
         style={styles.imageContainer}
         imageStyle={{ opacity: 0.65 }}
       >
-        <View style={[styles.container, { marginTop: headerHeight }]}>
-          <Headline>{currentExercise.title}</Headline>
+        <View style={{ marginTop: headerHeight }}>
+          <Headline>{title}</Headline>
           <AddSetsPanel
             exerciseId={exerciseId}
             showExerciseFormScreen={showExerciseFormScreen}
@@ -75,11 +52,9 @@ const StatsForm = () => {
         <List
           statsIcon={true}
           title="Your Exercise"
-          exerciseName={currentExercise.title}
+          exerciseName={title}
           trainingId = {trainingId}
           exerciseId = {exerciseId}
-          // data={currentExercise}
-          // unit={unit}
           unit={trainingUnit}
         />
       </ImageBackground>

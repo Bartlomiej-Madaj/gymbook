@@ -1,22 +1,15 @@
-import {
-  View,
-  Text,
-  Modal,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
-import { useWindowDimensions } from 'react-native';
+import { View, Modal, StyleSheet, FlatList } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
 
-import { SIZES, FONTS, COLORS } from '../../constants/index.js';
+import { COLORS } from '../../constants/index.js';
 import Input from '../UI/Input.jsx';
 import NewButton from '../UI/NewButton.jsx';
-import { useContext, useEffect, useState } from 'react';
-import { TraningContext } from '../../store/traningContext.js';
 import { checkFormIsValid } from '../../helpers/support-function.js';
 import { ExerciseContext } from '../../store/exerciseContext.js';
-import UpdateStatsModal from './UpdateStatsModal.jsx';
 import EditStatsInput from './EditStatsInput.jsx';
-import { updateExercise } from '../../util/database.js';
+import { updateExercise } from '../../util/db/exerciseHelpers.js';
+import { getCurrentExercise } from '../../helpers/getCurrentExercise.js';
+import { getOffset } from '../../helpers/style/getOffset.js';
 
 const UpdateExerciseModal = ({
   isVisible,
@@ -24,43 +17,15 @@ const UpdateExerciseModal = ({
   exerciseId,
   trainingId = '',
 }) => {
-  const { height, width } = useWindowDimensions();
   const [exerciseName, setExerciseName] = useState('');
   const [newExercise, setNewExercise] = useState();
-  // const [exercises, setExercises] = useState([])
   const exerciseCtx = useContext(ExerciseContext);
-  const trainingCtx = useContext(TraningContext);
 
-  const exercises =
-    trainingId &&
-    trainingCtx.trainings.find((item) => item.id === trainingId).exercises;
-
-  //TU zacznij!!!!!!!!!!!!!!!!!!!!!
-  // useEffect(() => {
-  //   if(!trainingId) return
-  //   async function getExercises(){
-  //     const exercise = await selectAllExercises(trainingId)
-  //     // console.log(exercise)
-  //     // const exercise = await selectOneExercise(exerciseId)
-  //     // console.log(exercise)
-  //     // const stats = await selectAllStats(exerciseId)
-  //     setExercises(exercise)
-  //   }
-  //   getExercises()
-  // }, [exerciseId])
-
-  // console.log(exerciseId)
-
-  const { title: exerciseTitle, stats } = trainingId
-    ? exercises?.find((item) => item.id === exerciseId)
-    : exerciseCtx.exercises?.find((item) => item.id === exerciseId);
+  const { title, stats } = getCurrentExercise(exerciseId);
 
   useEffect(() => {
-    trainingId && exerciseCtx.addExercise(exercises);
-  }, []);
-  useEffect(() => {
-    setExerciseName(exerciseTitle);
-  }, [exerciseTitle]);
+    setExerciseName(title);
+  }, [title]);
 
   useEffect(() => {
     setNewExercise({ title: exerciseName });
@@ -68,9 +33,8 @@ const UpdateExerciseModal = ({
 
   async function updateExerciseHandler() {
     if (!checkFormIsValid(exerciseName)) return;
-    await updateExercise(exerciseName, exerciseId)
+    await updateExercise(exerciseName, exerciseId);
     exerciseCtx.updateExercise(exerciseId, newExercise);
-    trainingId && trainingCtx.updateTraining(trainingId);
     trainingId && exerciseCtx.clearExercises();
     changeModalVisibility();
   }
@@ -79,8 +43,7 @@ const UpdateExerciseModal = ({
     changeModalVisibility();
   }
 
-  const widthFacotr = 0.95;
-  const leftOffset = (width * (1 - widthFacotr)) / 2;
+  const [leftOffset, widthComponent] = getOffset(0.95);
 
   return (
     <Modal
@@ -93,7 +56,7 @@ const UpdateExerciseModal = ({
         <View
           style={[
             styles.container,
-            { left: leftOffset, width: width * widthFacotr },
+            { left: leftOffset, width: widthComponent },
           ]}
         >
           <Input
@@ -114,9 +77,7 @@ const UpdateExerciseModal = ({
               keyExtractor={(item) => item.id}
             />
           </View>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
-          >
+          <View style={styles.buttonContainer}>
             <NewButton
               title="Edit"
               onPress={updateExerciseHandler}
@@ -146,14 +107,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 8,
   },
-  inputsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  inputContainer: {
-    width: '30%',
-  },
   inputBox: {
     backgroundColor: '#ffffff7e',
     borderColor: COLORS.secondary,
@@ -161,5 +114,9 @@ const styles = StyleSheet.create({
   },
   labelText: {
     color: 'white',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
 });

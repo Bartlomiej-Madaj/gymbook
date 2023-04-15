@@ -4,10 +4,9 @@ import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
 import Headline from '../Text/Headline';
 import { searchExerciseByName } from '../../helpers/support-function.js';
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ExerciseDetails from './ExerciseDetails.jsx';
 import { ExerciseContext } from '../../store/exerciseContext.js';
-import { selectAllExercises } from '../../util/database.js';
 
 const List = ({
   title,
@@ -15,39 +14,25 @@ const List = ({
   unit,
   exerciseIcon,
   statsIcon,
-  // trainingId,
   exerciseId,
   showUpdateModal,
-  // toRenderList
 }) => {
   const exerciseCtx = useContext(ExerciseContext);
   const [foundExercise, setFoundExercise] = useState([]);
-  // const [exercises, setExercises] = useState([]);
-
-  let exercises = [];
-  exercises = exerciseCtx.exercises;
-
-  // useLayoutEffect(()=>{
-  //   async function getExercises() {
-  //     const exercises = await selectAllExercises(trainingId);
-  //     setExercises(exercises)
-  //     // const trainings = await selectAllTrainings();
-  //     // const currentTraining = trainings.find(item => item.id === trainingId)
-  //     const currentExercise = exercises.find(item => item.id === exerciseId)
-  //     // console.log(currentTraining)
-  //     // setCurrentTraining(currentTraining)
-  //     setFoundExercise([currentExercise])
-  //   }
-  //   getExercises()
-
-  //   //toRenderList is for test
-  // }, [trainingId, exerciseId, toRenderList])
-
-  // console.log(exercises)
-  // console.log(exercises);
+  const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
+    let exercises;
     if (exerciseName) {
+      exercises = exerciseCtx.exercises;
+    } else {
+      exercises = exerciseCtx.exercises.filter((item) => item.stats[0]);
+    }
+    setExercises(exercises);
+  }, [exerciseCtx.exercises]);
+
+  useEffect(() => {
+    if (exerciseName && exercises.at(0)) {
       const exercise = searchExerciseByName(exercises, exerciseName);
       setFoundExercise([exercise]);
     }
@@ -60,7 +45,7 @@ const List = ({
   if (!exercises.at(0)) {
     return (
       <View style={styles.listContainer}>
-        <Text style={styles.noteText}>You do not have exercise!</Text>
+        <Text style={styles.noteText}>You do not have exercises!</Text>
       </View>
     );
   }
@@ -73,10 +58,10 @@ const List = ({
           <ExerciseDetails
             exerciseIcon={exerciseIcon}
             statsIcon={statsIcon}
-            exerciseId = {exerciseId}
+            exerciseId={exerciseId}
             exercise={item}
             unit={unit}
-            onPress={showEditExerciseModal.bind(this, item.id)}
+            onPress={showEditExerciseModal.bind(this, item?.id)}
           />
         )}
         keyExtractor={() => Math.random().toFixed(6)}

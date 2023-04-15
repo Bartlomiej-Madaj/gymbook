@@ -1,16 +1,16 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native';
 
 import { SIZES, FONTS, COLORS } from '../../constants/index.js';
 
-const Headline = ({children, textStyle}) => {
+const Headline = ({ children, textStyle }) => {
   return (
     <View>
       <Text style={[styles.headerList, textStyle]}>{children}</Text>
     </View>
-  )
-}
+  );
+};
 
-export default Headline
+export default Headline;
 
 const styles = StyleSheet.create({
   headerList: {
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     textTransform: 'uppercase',
   },
-})
+});

@@ -1,14 +1,11 @@
-import { View, Text, Modal, StyleSheet } from 'react-native';
-import { useWindowDimensions } from 'react-native';
+import { View, Modal, StyleSheet } from 'react-native';
 
-import { SIZES, FONTS, COLORS } from '../../constants/index.js';
-import Input from '../UI/Input.jsx';
 import NewButton from '../UI/NewButton.jsx';
 import { useContext, useState } from 'react';
 import StatInputs from './StatInputs.jsx';
 import { ExerciseContext } from '../../store/exerciseContext.js';
-import useManageInput from '../../hooks/useManageInput.jsx';
-import { updateStat } from '../../util/database.js';
+import { updateStat } from '../../util/db/statHelper.js';
+import { getOffset } from '../../helpers/style/getOffset.js';
 
 const UpdateStatsModal = ({
   isVisible,
@@ -16,31 +13,27 @@ const UpdateStatsModal = ({
   exerciseId,
   statsId,
 }) => {
-  const { height, width } = useWindowDimensions();
-  // const [isClean, setIsClean, editStatsHandler, closeHandler, adjustEnteredValue] = useManageInput(exerciseId, statsId, changeModalVisibility)
-
   const [enteredValues, setEnteredValues] = useState();
   const [isClean, setIsClean] = useState(false);
   const exerciseCtx = useContext(ExerciseContext);
 
   async function editStatsHandler() {
-    await updateStat(enteredValues, statsId)
+    await updateStat(enteredValues, statsId);
     exerciseCtx.updateStats(exerciseId, statsId, enteredValues);
     setIsClean(true);
     changeModalVisibility();
   }
 
   function closeHandler() {
-    setIsClean(true)
-    changeModalVisibility()
+    setIsClean(true);
+    changeModalVisibility();
   }
 
   function adjustEnteredValue(enteredValues) {
     setEnteredValues(enteredValues);
   }
 
-  const widthFacotr = 0.95;
-  const leftOffset = (width * (1 - widthFacotr)) / 2;
+  const [leftOffset, widthComponent] = getOffset(0.95);
 
   return (
     <Modal
@@ -53,7 +46,7 @@ const UpdateStatsModal = ({
         <View
           style={[
             styles.container,
-            { left: leftOffset, width: width * widthFacotr },
+            { left: leftOffset, width: widthComponent },
           ]}
         >
           <StatInputs
@@ -63,9 +56,7 @@ const UpdateStatsModal = ({
             isClean={isClean}
             changeIsClean={setIsClean}
           />
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
-          >
+          <View style={styles.buttonContainer}>
             <NewButton
               title="Edit"
               onPress={editStatsHandler}
@@ -95,20 +86,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 8,
   },
-  inputsContainer: {
+  buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  inputContainer: {
-    width: '30%',
-  },
-  inputBox: {
-    backgroundColor: '#ffffff7e',
-    borderColor: COLORS.secondary,
-    borderRadius: 8,
-  },
-  labelText: {
-    color: 'white',
+    justifyContent: 'space-evenly',
   },
 });

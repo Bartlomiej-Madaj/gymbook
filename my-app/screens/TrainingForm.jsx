@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Button,
-  TextInput,
-  StyleSheet,
-  ImageBackground,
-} from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 
@@ -16,7 +9,7 @@ import { useContext, useState } from 'react';
 import { Training } from '../models/trainingModel.js';
 import { TraningContext } from '../store/traningContext.js';
 import { checkFormIsValid } from '../helpers/support-function.js';
-import { insertTraining } from '../util/database.js';
+import { insertTraining } from '../util/db/trainingHelpers.js';
 
 const TrainingForm = () => {
   const headerHeight = useHeaderHeight();
@@ -27,7 +20,7 @@ const TrainingForm = () => {
   const [messageOfInvalidInput, setMessageOfInvalidInput] = useState('');
   const trainingCtx = useContext(TraningContext);
 
-  async function goToExerciseForm() {
+  async function goToExerciseFormHandler() {
     if (!checkFormIsValid(enteredTrainigTitle, enteredTrainigUnit)) {
       setIsValid(false);
       return setMessageOfInvalidInput('Title and unit cannot be empty!');
@@ -35,11 +28,10 @@ const TrainingForm = () => {
     const newTraining = {
       trainingTitle: enteredTrainigTitle,
       date: Date.now(),
-      trainingUnit: enteredTrainigUnit
-    }
-    const resulte = await insertTraining(newTraining)
+      trainingUnit: enteredTrainigUnit,
+    };
+    const resulte = await insertTraining(newTraining);
     const training = new Training(newTraining, resulte.insertId);
-    // console.log(resulte)
     trainingCtx.addTraining(training);
     setEnteredTrainingTitle('');
     setEnteredTrainingUnit('');
@@ -88,7 +80,7 @@ const TrainingForm = () => {
         />
         <NewButton
           title="Add exercises"
-          onPress={goToExerciseForm}
+          onPress={goToExerciseFormHandler}
           rootContainerStyle={{ width: '50%' }}
         />
       </View>
@@ -114,8 +106,5 @@ const styles = StyleSheet.create({
   },
   labelText: {
     color: 'white',
-  },
-  invalidInput: {
-    borderColor: 'red',
-  },
+  }
 });

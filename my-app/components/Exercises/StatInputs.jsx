@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Input from '../UI/Input';
-import { SIZES, FONTS, COLORS } from '../../constants/index.js';
-import { TraningContext } from '../../store/traningContext';
-import { ExerciseContext } from '../../store/exerciseContext';
+import { COLORS } from '../../constants/index.js';
+import { getCurrentStats } from '../../helpers/getCurrentStats';
 
 const inputConfig = { maxLength: 3, keyboardType: 'numeric' };
 
@@ -18,8 +17,8 @@ const StatInputs = ({
   const [amountRep, setAmountRep] = useState('');
   const [weight, setWeight] = useState('');
   const [enteredValues, setEnteredValues] = useState();
-  const exerciseCtx = useContext(ExerciseContext);
-  const trainingCtx = useContext(TraningContext);
+
+  const currentStats = getCurrentStats(exerciseId, statsId);
 
   useEffect(() => {
     setEnteredValues({
@@ -34,18 +33,6 @@ const StatInputs = ({
     adjustEnteredValue(enteredValues);
   }, [enteredValues]);
 
-  const choosenTraining = trainingCtx.trainings?.find(
-    (item) => item.id === trainingCtx.trainingId
-  );
-
-  const currentExercise = trainingCtx.trainingId
-    ? choosenTraining.exercises.find((item) => item.id === exerciseId)
-    : exerciseCtx.exercises.find((item) => item.id === exerciseId);
-
-  const currentStats = currentExercise?.stats.find(
-    (item) => item.id === statsId
-  );
-
   useEffect(() => {
     if (!isClean) {
       setAmountSet(currentStats?.set);
@@ -56,7 +43,7 @@ const StatInputs = ({
       setAmountRep('');
       setWeight('');
     }
-  }, [isClean])
+  }, [isClean]);
 
   return (
     <View style={styles.inputsContainer}>

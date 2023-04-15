@@ -6,97 +6,31 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
-
-import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from '../constants/index.js';
 import ExerciseDetails from '../components/Exercises/ExerciseDetails.jsx';
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { TraningContext } from '../store/traningContext.js';
-import UpdateExerciseModal from '../components/Exercises/UpdateExerciseModal.jsx';
-import { ExerciseContext } from '../store/exerciseContext.js';
+import { useEffect, useState } from 'react';
 import NewButton from '../components/UI/NewButton.jsx';
 import * as SplashScreen from 'expo-splash-screen';
-import { Exercise, ExerciseStat } from '../models/exerciseModel.js';
-import { deleteTraining, selectAllExercises, selectAllStats, selectOneTrainings } from '../util/database.js';
+import {
+  deleteTraining,
+} from '../util/db/trainingHelpers.js';
+import { getExercises } from '../helpers/getAllExercises.js';
 
 SplashScreen.preventAutoHideAsync();
 
 const TrainingDetails = ({ route, navigation }) => {
   const headerHeight = useHeaderHeight();
-  const trainingCtx = useContext(TraningContext);
-  const [exerciseModalIsvisible, setExercisleModalIsvisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [exerciseId, setExerciseId] = useState('');
   const [exercises, setExercises] = useState([]);
 
-  // const trainings = [...trainingCtx.trainings, ...DUMMY_TRAININGS];
-  const {trainingId, trainingUnit} = route.params;
-  // useEffect(() => {
-  //   trainingCtx.adjustTrainingId(trainingId);
-  // }, [trainingId]);
-  // const trainingDay = trainings.find((item) => item.id === trainingId);
-  // const { exercises } = trainingDay;
+  const { trainingId, trainingUnit } = route.params;
 
-  // let exercisesA = [];
   useEffect(() => {
-    async function getExercises() {
-      const exercises = await selectAllExercises(trainingId);
-      exercises.map(async (exercise) => {
-        const exerciseFromDb = new Exercise(exercise.title, exercise.id);
-        const stats = await selectAllStats(exercise.id);
-        stats.map((stat) => {
-          const statsFromDb = new ExerciseStat(
-            stat.series.toString(),
-            stat.rep.toString(),
-            stat.weight.toString(),
-            stat.id
-          );
-          exerciseFromDb.addStats(statsFromDb);
-        });
-        setExercises((currentExercises) => [...currentExercises,
-          exerciseFromDb,
-        ]);
-      });
-      setIsLoaded(true);
-    }
-    getExercises();
+    getExercises(trainingId, setExercises);
+    setIsLoaded(true);
   }, [trainingId]);
 
-  const [training, setTraining] = useState()
-
-  useEffect(() => {
-    async function getOneTraining(){
-      const training = await selectOneTrainings(trainingId)
-      // console.log(training)
-      setTraining({
-        ...training[0],
-        exercises: exercises
-      })
-    }
-    
-    getOneTraining()
-  }, [trainingId, exercises])
-  
-  useEffect(() => {
-    trainingCtx.addTrainingFromDB(training)
-
-  },[training])
-
-
-  // console.log(trainingCtx.trainings)
-
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: trainingDay.trainingTitle.toUpperCase(),
-  //   });
-  // }, [navigation, trainingDay.trainingTitle]);
-
-  function showTraining(exerciseId) {
-    setExerciseId(exerciseId);
-    setExercisleModalIsvisible(true);
-  }
   async function removeTraining() {
-    // trainingCtx.deleteTraining(trainingId);
-    await deleteTraining(trainingId)
+    await deleteTraining(trainingId);
     navigation.navigate('AllTrainings');
   }
 
@@ -131,7 +65,6 @@ const TrainingDetails = ({ route, navigation }) => {
               key={exercise.id}
               exercise={exercise}
               unit={trainingUnit}
-              onPress={showTraining.bind(this, exercise.id)}
             />
           ))}
         </ScrollView>
@@ -141,14 +74,6 @@ const TrainingDetails = ({ route, navigation }) => {
         rootContainerStyle={styles.buttonContainer}
         onPress={removeTraining}
       />
-      {exerciseId && (
-        <UpdateExerciseModal
-          isVisible={exerciseModalIsvisible}
-          changeModalVisibility={() => setExercisleModalIsvisible(false)}
-          exerciseId={exerciseId}
-          trainingId={trainingId}
-        />
-      )}
     </ImageBackground>
   );
 };

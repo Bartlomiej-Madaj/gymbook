@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   StyleSheet,
   FlatList,
   ActivityIndicator,
@@ -9,19 +8,17 @@ import {
 import { useHeaderHeight } from '@react-navigation/elements';
 import * as SplashScreen from 'expo-splash-screen';
 
-import { DUMMY_TRAININGS, SIZES, FONTS, COLORS } from '../constants/index.js';
+import { SIZES, FONTS, COLORS } from '../constants/index.js';
 import Training from '../components/Training/Training.jsx';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { TraningContext } from '../store/traningContext.js';
-import { useContext, useEffect, useState } from 'react';
-import { selectAllExercises, selectAllStats, selectAllTrainings } from '../util/database.js';
+import { useEffect, useState } from 'react';
+import { selectAllTrainings } from '../util/db/trainingHelpers.js';
 
 SplashScreen.preventAutoHideAsync();
 
-const AllTrainings = ({ navigation, route }) => {
+const AllTrainings = ({ navigation }) => {
   const headerHeight = useHeaderHeight();
-  // const trainingCtx = useContext(TraningContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [trainings, setTrainings] = useState()
 
@@ -70,7 +67,6 @@ const AllTrainings = ({ navigation, route }) => {
             <Training
               title={item.title}
               date={item.date}
-              // id={item.id}
               onPress={showTrainingDetailsHandler.bind(this, item.id, item.unit)}
             />
           )}
@@ -90,10 +86,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#606060',
-  },
-  header: {
-    maxHeight: '10%',
-    alignItems: 'center',
   },
   title: {
     fontFamily: FONTS.bold,

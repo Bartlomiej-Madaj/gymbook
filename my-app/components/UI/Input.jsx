@@ -22,14 +22,12 @@ const Input = ({
       <Text style={[styles.labelText, labelTextStyle]}> {label} </Text>
       <View style={[styles.textInputContainer, containerInputStyle]}>
         <TextInput
-          onChangeText={(text) =>
-            addEnteredValueHandler(text)
-          }
+          onChangeText={(text) => addEnteredValueHandler(text)}
           placeholder={placeholder}
           style={textInputStyle}
           value={value}
           autoCorrect={false}
-          autoCapitalize='sentences'
+          autoCapitalize="sentences"
           {...config}
         />
       </View>

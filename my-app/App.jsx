@@ -1,23 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
-// import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useFonts } from 'expo-font';
-// import AppLoading from 'expo-app-loading';
 import * as SplashScreen from 'expo-splash-screen';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, ActivityIndicator } from 'react-native';
 
 import AllTrainings from './screens/AllTrainings';
 import TrainingForm from './screens/TrainingForm';
 import TrainingDetails from './screens/TrainingDetails';
 import ExerciseForm from './screens/ExerciseForm';
 import TrainingProvider from './store/traningContext';
-import { deleteDB, initExercise, initStats, initTraining, selectAllDemo } from './util/database';
 import StatsForm from './screens/StatsForm';
 import ExerciseProvider from './store/exerciseContext';
-import { Text, View, ActivityIndicator } from 'react-native';
+import { init } from './util/db/initDB';
 
 const Drawer = createDrawerNavigator();
 
@@ -88,41 +86,14 @@ function App() {
     InterRegular: require('./assets/fonts/Inter-Regular.ttf'),
     InterLight: require('./assets/fonts/Inter-Light.ttf'),
   });
-
-  // useEffect(() => {
-  //   async function getAll(){
-  //     // await deleteDB()
-  //     const result = await selectAllDemo()
-  //     // console.log(result)
-  //   }
-  //   getAll();
-  // })
-
   const [dbInitialized, setDbInitialized] = useState(false);
 
   useEffect(() => {
-    initTraining()
+    init()
       .then((result) => {
         setDbInitialized(true);
       })
-      .catch((err) => {
-        console.log(err)
-      });
-    initExercise()
-      .then((result) => {
-        setDbInitialized(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    initStats()
-      .then((result) => {
-        setDbInitialized(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -134,7 +105,7 @@ function App() {
     hideLoading();
   }, [dbInitialized]);
 
-  if (!dbInitialized){
+  if (!dbInitialized) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color="#ff5100" />
@@ -190,13 +161,3 @@ function App() {
 }
 
 export default App;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     zIndex: -1,
-//     flex: 1,
-//     backgroundColor: '#ffd0c0',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });

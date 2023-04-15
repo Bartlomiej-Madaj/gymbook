@@ -1,5 +1,3 @@
-import uuid from 'react-native-uuid';
-
 export class Training {
     constructor(training, id){
         this.id = id,

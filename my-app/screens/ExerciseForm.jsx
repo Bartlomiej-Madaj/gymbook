@@ -9,16 +9,16 @@ import { useHeaderHeight } from '@react-navigation/elements';
 
 import { TraningContext } from '../store/traningContext';
 
-import { SIZES, FONTS, COLORS } from '../constants/index.js';
+import { COLORS } from '../constants/index.js';
 import NewButton from '../components/UI/NewButton';
 import Input from '../components/UI/Input';
 import { Exercise } from '../models/exerciseModel';
-import { compareItemsById } from '../helpers/support-function';
 import List from '../components/Exercises/List';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import UpdateExerciseModal from '../components/Exercises/UpdateExerciseModal';
 import { ExerciseContext } from '../store/exerciseContext';
-import { insertExercise, selectAllExercises, selectExercise } from '../util/database';
+import { insertExercise } from '../util/db/exerciseHelpers';
+import { getCurrentTraining } from '../helpers/getCurrentTraining';
 
 const ExerciseForm = () => {
   const headerHeight = useHeaderHeight();
@@ -29,30 +29,14 @@ const ExerciseForm = () => {
   const route = useRoute();
   const trainingCtx = useContext(TraningContext);
   const exerciseCtx = useContext(ExerciseContext);
-  // const {exercises, setExercises} = useState([])
-  const [exerciseId, setExerciseId] = useState('')
 
-  const { trainingId, toRenderList } = route.params;
-  // const exercises = exerciseCtx.exercises
+  const { trainingId } = route.params;
 
-  const newTraining = trainingCtx.trainings.find((item) =>
-    compareItemsById(item.id, trainingId)
-  );
-
-  // useEffect(()=>{
-  //   async function getExercises(){
-  //     const exercises = await selectAllExercises(trainingId)
-  //     setExercises(exercises)
-  //   }
-  //   getExercises()
-
-  // }, [trainingId])
-
-  // console.log(exercises)
+  const {trainingTitle, trainingUnit } = getCurrentTraining(trainingId)
 
   useEffect(() => {
     navigate.setOptions({
-      title: newTraining.trainingTitle.toUpperCase(),
+      title: trainingTitle.toUpperCase(),
     });
   },[])
  
@@ -61,7 +45,6 @@ const ExerciseForm = () => {
     const result = await insertExercise(exerciseName, trainingId)
     const newExercise = new Exercise(exerciseName, result.insertId);
     exerciseCtx.addExercise(newExercise);
-    setExerciseId(result.insertId)
     showStatsForm(result.insertId);
   }
 
@@ -117,11 +100,7 @@ const ExerciseForm = () => {
         </View>
         <List
           title="Your Exercises"
-          // data={exercises}
-          // toRenderList={toRenderList}
-          unit={newTraining.trainingUnit}
-          // trainingId = {trainingId}
-          // exerciseId = {exerciseId}
+          unit={trainingUnit}
           showUpdateModal={showUpdateExerciseModal}
           exerciseIcon={true}
         />
@@ -140,14 +119,6 @@ const styles = StyleSheet.create({
   containerButton: {
     flexDirection: 'row-reverse',
     justifyContent: 'space-evenly',
-  },
-  inputsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  inputContainer: {
-    width: '30%',
   },
   inputBox: {
     backgroundColor: '#ffffff7e',
